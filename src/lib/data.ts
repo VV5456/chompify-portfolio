@@ -232,23 +232,53 @@ export const ARTWORKS: Artwork[] = [
   }
 ];
 
-export const PRICING_TIERS = [
+export interface PricingCategory {
+  id: string;
+  title: string;
+  subtitle: string;
+  sketch: number;
+  flatColours: number;
+  fullRender: number;
+}
+
+export const PRICING_CATEGORIES: PricingCategory[] = [
   {
-    name: "Portrait",
-    description: "Detailed character portrait from the chest up. Minimal background.",
-    guidePrice: "Starting from $150",
-    turnaround: "1-2 Weeks"
+    id: "headshots",
+    title: "HEADSHOTS",
+    subtitle: "Expressive portrait focused from the shoulders up",
+    sketch: 20,
+    flatColours: 30,
+    fullRender: 50,
   },
   {
-    name: "Half Body",
-    description: "Character illustration from the waist up with contextual elements.",
-    guidePrice: "Starting from $250",
-    turnaround: "2-3 Weeks"
+    id: "half-body",
+    title: "HALF-BODY",
+    subtitle: "Mid-length figure illustration from waist up",
+    sketch: 40,
+    flatColours: 50,
+    fullRender: 70,
   },
   {
-    name: "Full Illustration",
-    description: "Full figure, dynamic composition, and fully developed environment.",
-    guidePrice: "Starting from $450",
-    turnaround: "4-6 Weeks"
-  }
+    id: "full-body",
+    title: "FULL-BODY",
+    subtitle: "Complete figure artwork with dynamic pose",
+    sketch: 60,
+    flatColours: 70,
+    fullRender: 90,
+  },
 ];
+
+export const ADDITIONAL_FEES = [
+  { label: "Additional Character", value: "+100%" },
+  { label: "Commercial Use Fee", value: "+50%" },
+  { label: "Merchandising Fee", value: "+40%" },
+];
+
+export const PRICING_NOTES = {
+  background: "$20–$80 depending on background complexity",
+  discount: "10% off when purchasing 3 or more character art pieces.",
+  disclaimer: "Rates displayed are an investment guide to help plan your commission. Final quotes are confirmed after project inquiry based on specific requirements.",
+};
+
+export const PRICING_TIERS = PRICING_CATEGORIES;
+
