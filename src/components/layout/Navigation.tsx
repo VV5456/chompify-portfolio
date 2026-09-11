@@ -13,6 +13,33 @@ export default function Navigation() {
   }, []);
 
   const scrollTo = (id: string) => {
+    if (id === "portfolio") {
+      const el = document.getElementById("portfolio-marquee") || document.getElementById("portfolio");
+      if (el) {
+        const navbarOffset = 60;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - navbarOffset,
+          behavior: "smooth"
+        });
+        return;
+      }
+    }
+
+    if (id === "pricing") {
+      const el = document.getElementById("pricing-grid") || document.getElementById("pricing");
+      if (el) {
+        // Position scroll right under the "Pricing Guide" header text line
+        const navbarOffset = 90;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - navbarOffset,
+          behavior: "smooth"
+        });
+        return;
+      }
+    }
+
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });

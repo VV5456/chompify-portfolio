@@ -41,7 +41,7 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
     <section id="contact" className="py-32 bg-background">
       <div className="container mx-auto px-6 max-w-5xl flex flex-col md:flex-row gap-16">
         <div className="md:w-5/12">
-          <h2 className="font-serif text-4xl md:text-5xl text-text mb-6">Start an Inquiry</h2>
+          <h2 className="font-serif text-4xl md:text-5xl text-text mb-6">Commission Me</h2>
           <p className="font-sans text-muted mb-8 leading-relaxed text-lg">
             Have an idea for a custom piece? Simply describe what you are looking for. There are no rigid templates—let's create something unique together.
           </p>

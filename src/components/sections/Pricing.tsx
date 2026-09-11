@@ -6,7 +6,7 @@ import { Info, Sparkles, Tag, Layers, Percent } from "lucide-react";
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 md:py-32 bg-surface/50 border-t border-text/10 relative overflow-hidden select-none">
+    <section id="pricing" className="py-24 md:py-32 bg-surface/50 border-t border-text/10 relative overflow-hidden select-none scroll-mt-20">
       <div className="max-w-[1550px] mx-auto px-6 md:px-12">
         
         {/* Streamlined Section Header & Guide Notice (Grids Moved Up) */}
@@ -29,8 +29,8 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* Core Pricing & Character Artwork Editorial Layout */}
-        <div className="grid lg:grid-cols-12 gap-8 md:gap-10 items-stretch mb-16 md:mb-20">
+        {/* Core Pricing Grid & Character Artwork Layout (Framed right under header) */}
+        <div id="pricing-grid" className="scroll-mt-24 md:scroll-mt-28 grid lg:grid-cols-12 gap-8 md:gap-10 items-stretch mb-16 md:mb-20">
           
           {/* Main 3 Tiers Comparison Grid & Single Unified CTA */}
           <div className="lg:col-span-8 flex flex-col justify-between">
