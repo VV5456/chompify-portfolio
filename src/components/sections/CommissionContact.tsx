@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Artwork } from "@/lib/data";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 
 const formSchema = z.object({
@@ -25,7 +25,11 @@ interface CommissionContactProps {
 }
 
 export default function CommissionContact({ selectedArtwork }: CommissionContactProps) {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       preferredContactMethod: "Email",
@@ -40,9 +44,53 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
     }
   }, [selectedArtwork, setValue]);
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Inquiry submitted:", data);
-    alert("Thank you! Your commission inquiry has been logged (Draft Mode). Saanvi will review it shortly.");
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/commission", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          preferredContactMethod: data.preferredContactMethod || "Email",
+          customPlatform: data.customPlatform || "",
+          contactHandle: data.contactHandle || "",
+          idea: data.idea,
+          deadline: data.deadline || "",
+          referenceArtwork: data.referenceArtwork || "",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitStatus("success");
+        reset({
+          name: "",
+          email: "",
+          preferredContactMethod: "Email",
+          customPlatform: "",
+          contactHandle: "",
+          idea: "",
+          deadline: "",
+          referenceArtwork: "",
+        });
+      } else {
+        setSubmitStatus("error");
+        setErrorMessage(result.error || "Something went wrong while sending your inquiry. Please try again.");
+      }
+    } catch {
+      setSubmitStatus("error");
+      setErrorMessage("Something went wrong while sending your inquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -209,6 +257,29 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
               </div>
             </div>
 
+            {submitStatus === "success" && (
+              <div className="p-3.5 bg-primary/10 border border-primary/30 text-text font-sans text-xs md:text-sm rounded-xs flex items-start gap-2.5">
+                <Sparkles className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-semibold text-primary block mb-0.5">Inquiry Sent Successfully!</span>
+                  Thank you for your commission request. Saanvi will review your details and respond shortly via your preferred contact method.
+                </div>
+              </div>
+            )}
+
+            {submitStatus === "error" && (
+              <div className="p-3.5 bg-red-500/10 border border-red-500/30 text-red-600 font-sans text-xs md:text-sm rounded-xs flex items-center justify-between gap-2">
+                <span>{errorMessage}</span>
+                <button 
+                  type="button" 
+                  onClick={() => setSubmitStatus("idle")}
+                  className="text-xs underline hover:text-red-800 ml-2 cursor-pointer flex-shrink-0 font-medium"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
+
             <div className="pt-1 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-muted/80 font-sans">
                 By submitting this form, you agree to the{" "}
@@ -234,9 +305,17 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
 
               <button 
                 type="submit"
-                className="w-full sm:w-auto px-8 py-3.5 bg-primary text-background font-sans uppercase tracking-widest text-xs font-medium hover:bg-primary/90 transition-colors duration-300 shadow-md flex-shrink-0"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto px-8 py-3.5 bg-primary text-background font-sans uppercase tracking-widest text-xs font-medium hover:bg-primary/90 transition-colors duration-300 shadow-md flex-shrink-0 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Send Commission Inquiry
+                {isSubmitting ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-background border-t-transparent rounded-full animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  "Send Commission Inquiry"
+                )}
               </button>
             </div>
           </form>
