@@ -59,14 +59,4 @@ CHOMPIFY is an interactive digital art portfolio built with Next.js, Framer Moti
 
 ---
 
-## 📬 Contact & Socials
-
-- **Website**: [chompify.art](https://chompify.art)
-- **Instagram**: [@chompify](https://www.instagram.com/chompify)
-- **Threads**: [@chompify](https://www.threads.com/@chompify)
-- **Patreon**: [patreon.com/cw/chompify](https://www.patreon.com/cw/chompify)
-- **Email**: [chompifycomms@gmail.com](mailto:chompifycomms@gmail.com)
-
----
-
 © 2026 Saanvi (Chomp). All rights reserved.
