@@ -139,9 +139,31 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
               />
             </div>
 
+            <p className="text-xs text-muted/80 font-sans text-left pt-1">
+              By submitting this form, you agree to the{" "}
+              <a 
+                href="#terms" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById("terms");
+                  if (el) {
+                    const navbarOffset = 80;
+                    const elementTop = el.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo({
+                      top: elementTop - navbarOffset,
+                      behavior: "smooth"
+                    });
+                  }
+                }}
+                className="text-primary underline hover:text-text font-medium transition-colors"
+              >
+                Terms of Service
+              </a>.
+            </p>
+
             <button 
               type="submit"
-              className="w-full py-5 bg-primary text-background font-sans uppercase tracking-widest text-sm font-medium hover:bg-primary/90 transition-colors duration-300 mt-4 shadow-md"
+              className="w-full py-5 bg-primary text-background font-sans uppercase tracking-widest text-sm font-medium hover:bg-primary/90 transition-colors duration-300 mt-2 shadow-md"
             >
               Send Commission Inquiry
             </button>

@@ -1,13 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F9F6F0; /* warm cream */
+  --background: #F9F6F0;
+  /* warm cream */
   --surface: #F3ECE1;
-  --primary: #BD6B49; /* terracotta */
-  --secondary: #637F7D; /* muted blue */
-  --navy: #152238; /* editorial deep navy blue */
-  --accent: #D4A373; /* soft golden */
-  --text: #2C2A29; /* dark brown */
+  --primary: #BD6B49;
+  /* terracotta */
+  --secondary: #637F7D;
+  /* muted blue */
+  --navy: #152238;
+  /* editorial deep navy blue */
+  --accent: #D4A373;
+  /* soft golden */
+  --text: #2C2A29;
+  /* dark brown */
   --muted: #7E7873;
   --border: #E6DFD3;
 }
@@ -38,13 +44,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
@@ -52,8 +61,8 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
