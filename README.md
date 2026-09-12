@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CHOMPIFY — Digital Art Portfolio & Commission Studio
 
-## Getting Started
+> Official digital art portfolio and commission platform for **Saanvi (Chomp)**.  
+> **Live Site**: [chompify.art](https://chompify.art)
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎨 About the Project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+CHOMPIFY is an interactive digital art portfolio built with Next.js, Framer Motion, and Tailwind CSS. It features a continuous artwork gallery stream, interactive commission pricing guide, about section with artist story, and a direct Google Apps Script serverless backend for commission inquiries.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+- **Interactive Gallery & Marquee**: Continuous artwork stream with interactive modal views and parallax scroll elements.
+- **Commission Inquiry System**: Dynamic commission form with automated background Google Sheets logging & email proxy.
+- **Transparent Pricing**: Detailed breakdowns for Headshots, Half-Body, Full-Body, and additional license add-ons.
+- **Custom Branding**: Bespoke warm editorial theme, smooth micro-animations, custom typography, and high-DPI favicons.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Form Handling & Validation**: React Hook Form + Zod
+- **Backend & Integrations**: Next.js API Routes + Google Apps Script Web App
+- **Deployment**: Vercel (Production Domain: `chompify.art`)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Local Development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/VV5456/chompify-portfolio.git
+   cd chompify-portfolio
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables:**
+   Create a `.env.local` file:
+   ```env
+   GOOGLE_APPS_SCRIPT_URL=your_google_apps_script_url
+   GOOGLE_APPS_SCRIPT_TOKEN=your_security_token
+   ```
+
+4. **Run development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view in browser.
+
+---
+
+## 📬 Contact & Socials
+
+- **Website**: [chompify.art](https://chompify.art)
+- **Instagram**: [@chompify](https://www.instagram.com/chompify)
+- **Threads**: [@chompify](https://www.threads.com/@chompify)
+- **Patreon**: [patreon.com/cw/chompify](https://www.patreon.com/cw/chompify)
+- **Email**: [chompifycomms@gmail.com](mailto:chompifycomms@gmail.com)
+
+---
+
+© 2026 Saanvi (Chomp). All rights reserved.
