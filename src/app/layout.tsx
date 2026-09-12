@@ -15,6 +15,14 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "CHOMPIFY | Digital Art by Saanvi",
   description: "Digital art portfolio and commission platform for Saanvi.",
+  icons: {
+    icon: [
+      { url: "/icon/IMG_1146.png", type: "image/png" },
+      { url: "/icon/IMG_1146.ico", type: "image/x-icon" },
+    ],
+    shortcut: "/icon/IMG_1146.ico",
+    apple: "/icon/IMG_1146.png",
+  },
 };
 
 export default function RootLayout({

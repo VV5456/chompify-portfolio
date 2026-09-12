@@ -201,26 +201,6 @@ export const ARTWORKS: Artwork[] = [
     imageSrc: "/artworks/Untitled_Artwork(2).png" 
   },
   { 
-    id: "untitled-design-1", 
-    title: "Crimson Horizon", 
-    medium: "Digital Painting", 
-    year: "2026", 
-    depthLayer: 1,
-    commissionStatus: "Commissioned Work",
-    description: "Striking editorial artwork featuring bold warm color blocking and fluid lines.",
-    imageSrc: "/artworks/Untitled design(1).png" 
-  },
-  { 
-    id: "untitled-design-2", 
-    title: "Twilight Grace", 
-    medium: "Mixed Media", 
-    year: "2026", 
-    depthLayer: 2,
-    commissionStatus: "Commissioned Work",
-    description: "Serene digital painting combining traditional brush textures with digital precision.",
-    imageSrc: "/artworks/Untitled design - 2.png" 
-  },
-  { 
     id: "a1dff15b", 
     title: "Enchanted Passages", 
     medium: "Digital Art", 

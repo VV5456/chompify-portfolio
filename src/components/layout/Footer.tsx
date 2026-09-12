@@ -24,9 +24,10 @@ export default function Footer() {
 
             <div className="space-y-3">
               <span className="font-mono text-muted/50 block mb-2">Socials</span>
-              <div><a href="#" className="text-text/80 hover:text-primary transition-colors">Instagram</a></div>
-              <div><a href="#" className="text-text/80 hover:text-primary transition-colors">ArtStation</a></div>
-              <div><a href="#" className="text-text/80 hover:text-primary transition-colors">Behance</a></div>
+              <div><a href="https://www.instagram.com/chompify" target="_blank" rel="noopener noreferrer" className="text-text/80 hover:text-primary transition-colors">Instagram</a></div>
+              <div><a href="https://www.threads.com/@chompify" target="_blank" rel="noopener noreferrer" className="text-text/80 hover:text-primary transition-colors">Threads</a></div>
+              <div><a href="mailto:chompifycomms@gmail.com" className="text-text/80 hover:text-primary transition-colors">Gmail</a></div>
+              <div><a href="https://www.patreon.com/cw/chompify" target="_blank" rel="noopener noreferrer" className="text-text/80 hover:text-primary transition-colors">Patreon</a></div>
             </div>
           </div>
         </div>
