@@ -40,6 +40,19 @@ export default function Navigation() {
       }
     }
 
+    if (id === "contact") {
+      const el = document.getElementById("contact");
+      if (el) {
+        const navbarOffset = 70;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - navbarOffset,
+          behavior: "smooth"
+        });
+        return;
+      }
+    }
+
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
