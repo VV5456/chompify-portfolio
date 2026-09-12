@@ -11,6 +11,7 @@ const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Valid email is required"),
   preferredContactMethod: z.string().optional(),
+  customPlatform: z.string().optional(),
   contactHandle: z.string().optional(),
   idea: z.string().min(10, "Please tell me a little bit about your idea"),
   budget: z.string().optional(),
@@ -140,16 +141,41 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium">
-                  Handle / Username (Optional)
-                </label>
-                <input 
-                  {...register("contactHandle")} 
-                  className="w-full bg-surface border border-border p-3 text-sm focus:outline-none focus:border-primary transition-colors"
-                  placeholder="e.g. @username"
-                />
-              </div>
+              {selectedContactMethod === "Other" ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium truncate">
+                      Platform Name *
+                    </label>
+                    <input 
+                      {...register("customPlatform")} 
+                      className="w-full bg-surface border border-border p-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                      placeholder="e.g. Telegram / Bluesky"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium truncate">
+                      Handle *
+                    </label>
+                    <input 
+                      {...register("contactHandle")} 
+                      className="w-full bg-surface border border-border p-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                      placeholder="e.g. @username"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium">
+                    {selectedContactMethod === "Email" ? "Handle (Optional)" : "Handle *"}
+                  </label>
+                  <input 
+                    {...register("contactHandle")} 
+                    className="w-full bg-surface border border-border p-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    placeholder="e.g. @username"
+                  />
+                </div>
+              )}
             </div>
 
             <div>
@@ -174,7 +200,7 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium">Reference Links (Optional)</label>
+                <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium">Reference Links</label>
                 <input 
                   {...register("referenceArtwork")} 
                   className="w-full bg-surface border border-border p-3 text-sm focus:outline-none focus:border-primary transition-colors"
