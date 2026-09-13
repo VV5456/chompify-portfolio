@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { PRICING_CATEGORIES, ADDITIONAL_FEES, PRICING_NOTES } from "@/lib/data";
+import { PRICING_CATEGORIES, ADDITIONAL_FEES, PRICING_NOTES, BOOK_COVER_PRICING } from "@/lib/data";
 import { Info, Sparkles, Tag, Layers, Percent } from "lucide-react";
 
 export default function Pricing() {
@@ -103,14 +103,57 @@ export default function Pricing() {
               </div>
             </div>
 
-            {/* Single Unified Commission Request Button Directly Under Grids */}
-            <button 
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="w-full py-4 border border-text/20 bg-background text-text font-sans uppercase tracking-widest text-[11px] font-semibold hover:bg-text hover:text-background transition-all duration-300 rounded-xs shadow-xs flex items-center justify-center gap-2 group mt-2"
-            >
-              <span>Inquire Commission Rates & Availability</span>
-              <span className="text-primary group-hover:text-background transition-colors">→</span>
-            </button>
+            {/* Horizontal Specialty Tier Card: Book Covers & Endpaper Illustrations */}
+            <div className="bg-background border border-text/10 p-6 md:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 hover:border-primary/40 transition-colors duration-300 rounded-xs shadow-xs group mt-3 relative overflow-hidden">
+              
+              {/* Dragon Background Artwork Overlay Layer */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+                <Image 
+                  src="/backgrounds/dragonBackground.png"
+                  alt="Dragon Book Cover Artwork Background"
+                  fill
+                  className="object-cover object-right opacity-20 sm:opacity-25 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 ease-out"
+                  sizes="(max-width: 1200px) 100vw, 800px"
+                />
+                {/* Gradient Vignette Mask to protect text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/30 sm:to-transparent" />
+              </div>
+
+              <div className="space-y-3 relative z-10">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
+                    Specialty Tier
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted/70">
+                    Commercial & Publishing
+                  </span>
+                </div>
+
+                <h3 className="font-serif text-2xl md:text-3xl text-text font-normal group-hover:text-primary transition-colors">
+                  {BOOK_COVER_PRICING.title}
+                </h3>
+
+                <ul className="space-y-1.5 pt-1">
+                  {BOOK_COVER_PRICING.features.map((feature, i) => (
+                    <li key={i} className="flex items-center gap-2 text-xs md:text-sm font-sans text-text/80 font-light">
+                      <span className="text-primary font-bold">•</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Price Highlight Badge Box (Using Native Site Theme Tokens + Subtle Backdrop Blur) */}
+              <div className="relative z-10 w-full sm:w-auto bg-primary/10 backdrop-blur-xs border border-primary/20 p-5 rounded-xs flex flex-col items-start sm:items-end justify-center min-w-[210px] shrink-0 shadow-xs">
+                <span className="font-serif text-2xl sm:text-3xl font-normal text-primary mb-1">
+                  {BOOK_COVER_PRICING.rateDisplay}
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-widest text-muted font-medium">
+                  Commercial Included
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Supporting Character Coverage Visual Guide */}

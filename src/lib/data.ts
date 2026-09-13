@@ -254,6 +254,17 @@ export const ADDITIONAL_FEES = [
   { label: "Merchandising Fee", value: "+40%" },
 ];
 
+export const BOOK_COVER_PRICING = {
+  title: "Book Covers, Endpaper Illustrations",
+  subtitle: "Full-scale custom artwork tailored for book covers, jackets, and endpaper spreads.",
+  startingRate: 250,
+  rateDisplay: "$250 onwards",
+  features: [
+    "depends on complexity",
+    "commercial license included!"
+  ]
+};
+
 export const PRICING_NOTES = {
   background: "$20–$80 depending on background complexity",
   discount: "10% off when purchasing 3 or more character art pieces.",
@@ -261,4 +272,6 @@ export const PRICING_NOTES = {
 };
 
 export const PRICING_TIERS = PRICING_CATEGORIES;
+
+
 
