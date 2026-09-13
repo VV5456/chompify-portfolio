@@ -552,7 +552,7 @@ const SKETCH_ELEMENTS = [
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-text/60 backdrop-blur-md flex items-center justify-center p-4 md:p-8 overflow-y-auto"
+            className="fixed inset-0 z-[100] bg-text/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-8 overflow-y-auto"
             onClick={() => setActiveArtwork(null)}
           >
             <motion.div 
@@ -561,33 +561,37 @@ const SKETCH_ELEMENTS = [
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-background border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-sm p-5 md:p-10 shadow-2xl relative flex flex-col md:flex-row gap-6 md:gap-8 my-auto"
+              className="bg-background border border-border max-w-4xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-y-auto rounded-sm p-4 sm:p-6 md:p-10 shadow-2xl relative flex flex-col md:flex-row gap-6 md:gap-8 my-auto"
             >
+              {/* Sticky top-right close button so it remains visible when scrolling down on mobile */}
               <button 
                 onClick={() => setActiveArtwork(null)}
-                className="absolute top-3 right-3 md:top-4 md:right-4 text-text hover:text-primary p-2.5 rounded-full bg-background/95 md:bg-transparent border border-border md:border-none shadow-md md:shadow-none transition-colors z-40 cursor-pointer"
+                className="sticky top-0 right-0 self-end -mb-10 text-text hover:text-primary p-2.5 rounded-full bg-background/95 border border-border md:border-none shadow-md md:shadow-none transition-colors z-40 cursor-pointer"
                 aria-label="Close modal"
               >
                 <X className="w-6 h-6" />
               </button>
 
-              <div className="md:w-1/2 relative aspect-[4/5] w-full bg-surface overflow-hidden rounded-sm border border-border">
+              {/* Uncropped Full Artwork Image Frame */}
+              <div className="md:w-1/2 relative w-full aspect-[4/5] min-h-[360px] sm:min-h-[440px] md:min-h-[480px] bg-surface/60 overflow-hidden rounded-sm border border-border flex items-center justify-center shrink-0">
                 <Image 
                   src={activeArtwork.imageSrc} 
                   alt={activeArtwork.title}
                   fill
-                  className="object-cover"
+                  className="object-contain p-1.5"
                   sizes="(max-width: 768px) 100vw, 500px"
+                  priority
                 />
               </div>
 
-              <div className="md:w-1/2 flex flex-col justify-between">
+              {/* Artwork Text & Details Content */}
+              <div className="md:w-1/2 flex flex-col justify-between pt-2 md:pt-0">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface text-primary font-sans text-xs font-medium uppercase tracking-wider rounded-full mb-4 border border-border">
                     <Sparkles className="w-3 h-3" />
                     {activeArtwork.commissionStatus}
                   </div>
-                  <h2 className="font-serif text-2xl md:text-4xl text-text mb-2 font-normal">{activeArtwork.title}</h2>
+                  <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-text mb-2 font-normal">{activeArtwork.title}</h2>
                   <div className="font-sans text-sm text-muted mb-4 md:mb-6 flex items-center gap-4">
                     <span>{activeArtwork.medium}</span>
                     <span>•</span>
