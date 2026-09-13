@@ -15,7 +15,7 @@ export default function Footer() {
                 className="object-contain object-left"
                 priority
               />
-              <p className="absolute top-[65.5%] left-[5%] font-mono text-[5.5px] sm:text-[8px] md:text-[9.5px] lg:text-[10.5px] xl:text-[11.5px] uppercase tracking-tight text-text leading-none select-none pointer-events-none whitespace-nowrap">
+              <p className="absolute top-[65.5%] left-[2%] sm:left-[4%] md:left-[5%] font-mono text-[5.2px] sm:text-[7.5px] md:text-[9.5px] lg:text-[10.5px] xl:text-[11.5px] uppercase tracking-tight text-text leading-none select-none pointer-events-none whitespace-nowrap">
                 Saanvi • Digital Art Portfolio & Commission Studio
               </p>
             </div>
