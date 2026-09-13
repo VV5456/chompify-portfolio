@@ -219,6 +219,8 @@ export interface PricingCategory {
   sketch: number;
   flatColours: number;
   fullRender: number;
+  bgImage: string;
+  bgTitle: string;
 }
 
 export const PRICING_CATEGORIES: PricingCategory[] = [
@@ -229,6 +231,8 @@ export const PRICING_CATEGORIES: PricingCategory[] = [
     sketch: 20,
     flatColours: 30,
     fullRender: 50,
+    bgImage: "/artworks/IMG_0930.PNG",
+    bgTitle: "Ethereal Shadows",
   },
   {
     id: "half-body",
@@ -237,6 +241,8 @@ export const PRICING_CATEGORIES: PricingCategory[] = [
     sketch: 40,
     flatColours: 50,
     fullRender: 70,
+    bgImage: "/artworks/IMG_0961.PNG",
+    bgTitle: "Astral Whispers",
   },
   {
     id: "full-body",
@@ -245,6 +251,8 @@ export const PRICING_CATEGORIES: PricingCategory[] = [
     sketch: 60,
     flatColours: 70,
     fullRender: 90,
+    bgImage: "/artworks/Untitled_Artwork.png",
+    bgTitle: "Luminous Horizon",
   },
 ];
 

@@ -104,7 +104,7 @@ export default function Pricing() {
             </div>
 
             {/* Horizontal Specialty Tier Card: Book Covers & Endpaper Illustrations */}
-            <div className="bg-background border border-text/10 p-6 md:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 hover:border-primary/40 transition-colors duration-300 rounded-xs shadow-xs group mt-3 relative overflow-hidden">
+            <div className="bg-background border border-text/10 p-6 md:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 hover:border-primary/50 transition-colors duration-300 rounded-xs shadow-xs group mt-3 relative overflow-hidden">
               
               {/* Dragon Background Artwork Overlay Layer */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
@@ -112,11 +112,11 @@ export default function Pricing() {
                   src="/backgrounds/dragonBackground.png"
                   alt="Dragon Book Cover Artwork Background"
                   fill
-                  className="object-cover object-right opacity-20 sm:opacity-25 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 ease-out"
+                  className="object-cover object-right opacity-60 sm:opacity-70 group-hover:opacity-85 group-hover:scale-105 transition-all duration-700 ease-out saturate-[1.2]"
                   sizes="(max-width: 1200px) 100vw, 800px"
                 />
                 {/* Gradient Vignette Mask to protect text contrast */}
-                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/30 sm:to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40 sm:to-transparent" />
               </div>
 
               <div className="space-y-3 relative z-10">
@@ -124,8 +124,8 @@ export default function Pricing() {
                   <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
                     Specialty Tier
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted/70">
+                  <span className="text-text/20">•</span>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
                     Commercial & Publishing
                   </span>
                 </div>
@@ -144,12 +144,12 @@ export default function Pricing() {
                 </ul>
               </div>
 
-              {/* Price Highlight Badge Box (Using Native Site Theme Tokens + Subtle Backdrop Blur) */}
-              <div className="relative z-10 w-full sm:w-auto bg-primary/10 backdrop-blur-xs border border-primary/20 p-5 rounded-xs flex flex-col items-start sm:items-end justify-center min-w-[210px] shrink-0 shadow-xs">
-                <span className="font-serif text-2xl sm:text-3xl font-normal text-primary mb-1">
+              {/* Price Highlight Badge Box with Translucent Glass Backdrop */}
+              <div className="relative z-10 w-full sm:w-auto bg-background/75 backdrop-blur-md border border-primary/30 p-6 rounded-xs flex flex-col items-start sm:items-end justify-center min-w-[220px] shrink-0 shadow-sm">
+                <span className="font-serif text-3xl sm:text-4xl font-normal text-primary mb-1">
                   {BOOK_COVER_PRICING.rateDisplay}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted font-medium">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-muted font-semibold">
                   Commercial Included
                 </span>
               </div>
