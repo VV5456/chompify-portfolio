@@ -2,12 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 150);
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 150;
+      setIsScrolled(scrolled);
+      if (!scrolled) {
+        setMobileMenuOpen(false);
+      }
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -29,7 +38,6 @@ export default function Navigation() {
     if (id === "pricing") {
       const el = document.getElementById("pricing-grid") || document.getElementById("pricing");
       if (el) {
-        // Position scroll right under the "Pricing Guide" header text line
         const navbarOffset = 90;
         const elementTop = el.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({
@@ -72,7 +80,10 @@ export default function Navigation() {
         {/* Studio Brand Header */}
         <div 
           className="group flex items-baseline gap-3 cursor-pointer select-none" 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            setMobileMenuOpen(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
         >
           <span className="font-serif text-2xl md:text-3xl font-normal tracking-wide text-text group-hover:text-primary transition-colors duration-300">
             CHOMPIFY
@@ -82,8 +93,8 @@ export default function Navigation() {
           </span>
         </div>
         
-        {/* Minimal Navigation Items */}
-        <nav className="flex items-center space-x-6 md:space-x-10 font-sans text-xs uppercase tracking-widest font-medium">
+        {/* Desktop Navigation Items (Hidden on Mobile) */}
+        <nav className="hidden md:flex items-center space-x-6 md:space-x-10 font-sans text-xs uppercase tracking-widest font-medium">
           {[
             { label: "Portfolio", id: "portfolio" },
             { label: "Pricing", id: "pricing" },
@@ -100,7 +111,53 @@ export default function Navigation() {
             </button>
           ))}
         </nav>
+
+        {/* Mobile 3-Bar Burger Button (Only on Mobile) */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 -mr-2 text-text hover:text-primary transition-colors focus:outline-none"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+        </button>
       </div>
+
+      {/* Mobile Navigation Dropdown Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="md:hidden overflow-hidden bg-background/95 backdrop-blur-md border-b border-text/10 shadow-lg px-6 py-4 mt-4"
+          >
+            <nav className="flex flex-col space-y-3 font-sans text-xs uppercase tracking-widest font-medium">
+              {[
+                { label: "Portfolio", id: "portfolio" },
+                { label: "Pricing", id: "pricing" },
+                { label: "About", id: "about" },
+                { label: "Commission", id: "contact" }
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    scrollTo(item.id);
+                  }}
+                  className="flex items-center justify-between text-left text-text/90 hover:text-primary transition-colors py-2 border-b border-text/5 last:border-none"
+                >
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
