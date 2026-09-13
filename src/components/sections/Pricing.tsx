@@ -157,9 +157,9 @@ export default function Pricing() {
           </div>
 
           {/* Supporting Character Coverage Visual Guide */}
-          <div className="lg:col-span-4 bg-background border border-text/10 p-6 md:p-8 flex flex-col justify-between rounded-xs shadow-xs relative overflow-hidden group">
+          <div className="lg:col-span-4 bg-background border border-text/10 p-6 md:p-8 flex flex-col justify-start gap-4 sm:gap-5 rounded-xs shadow-xs relative overflow-hidden group">
             {/* Figure Indicator Canvas */}
-            <div className="relative w-full h-[300px] sm:h-[360px] lg:h-[380px] mb-6 rounded-xs overflow-hidden bg-surface/60 border border-text/10 flex items-center justify-center p-6 sm:p-8">
+            <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[340px] lg:min-h-[380px] rounded-xs overflow-hidden bg-surface/60 border border-text/10 flex items-center justify-center p-4 sm:p-6">
               <div className="relative h-full aspect-[195/360] flex items-center justify-center">
                 {/* Mannequin Graphic */}
                 <Image 
@@ -194,8 +194,8 @@ export default function Pricing() {
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-2">
+            <div className="shrink-0 pt-1">
+              <div className="flex items-center justify-between mb-1.5">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
                   Coverage Reference
                 </span>
