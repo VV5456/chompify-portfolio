@@ -1,19 +1,27 @@
+import Image from "next/image";
+
 export default function Footer() {
   return (
     <footer className="bg-surface/60 border-t border-text/10 pt-24 pb-16">
       <div className="max-w-[1550px] mx-auto px-6 md:px-12 flex flex-col justify-between min-h-[300px]">
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-          <div className="md:col-span-6">
-            <h2 className="font-serif text-5xl sm:text-7xl md:text-8xl text-text font-normal tracking-tight mb-4">
-              CHOMPIFY
-            </h2>
-            <p className="font-mono text-xs uppercase tracking-widest text-muted/70">
-              Saanvi • Digital Art Portfolio & Commission Studio
-            </p>
+          <div className="md:col-span-8 lg:col-span-8">
+            <div className="relative w-full max-w-[320px] sm:max-w-[460px] md:max-w-[580px] lg:max-w-[680px] aspect-[2054/1035]">
+              <Image 
+                src="/artworks/BrandLogoTrimmed.PNG"
+                alt="Chompify Brand Logo"
+                fill
+                className="object-contain object-left"
+                priority
+              />
+              <p className="absolute top-[65.5%] left-[5%] font-mono text-[5.5px] sm:text-[8px] md:text-[9.5px] lg:text-[10.5px] xl:text-[11.5px] uppercase tracking-tight text-text leading-none select-none pointer-events-none whitespace-nowrap">
+                Saanvi • Digital Art Portfolio & Commission Studio
+              </p>
+            </div>
           </div>
 
-          <div className="md:col-span-6 flex flex-col md:flex-row justify-between md:justify-end gap-12 font-sans text-xs uppercase tracking-widest">
+          <div className="md:col-span-4 flex flex-col md:flex-row justify-between md:justify-end gap-12 font-sans text-xs uppercase tracking-widest pt-4 sm:pt-6">
             <div className="space-y-3">
               <span className="font-mono text-muted/50 block mb-2">Navigation</span>
               <div><a href="#portfolio" className="text-text/80 hover:text-primary transition-colors">Portfolio</a></div>
