@@ -13,6 +13,21 @@ interface PortfolioGalleryProps {
 export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryProps) {
   const [activeArtwork, setActiveArtwork] = useState<Artwork | null>(null);
 
+  // Lock body scroll and handle Escape key when modal is open
+  useEffect(() => {
+    if (activeArtwork) {
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setActiveArtwork(null);
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = "unset";
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [activeArtwork]);
+
   // Solstice-Style Hero Scroll Parallax Animation
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -537,7 +552,7 @@ const SKETCH_ELEMENTS = [
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-text/60 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 z-[100] bg-text/60 backdrop-blur-md flex items-center justify-center p-4 md:p-8 overflow-y-auto"
             onClick={() => setActiveArtwork(null)}
           >
             <motion.div 
@@ -546,11 +561,11 @@ const SKETCH_ELEMENTS = [
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-background border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-sm p-6 md:p-10 shadow-2xl relative flex flex-col md:flex-row gap-8"
+              className="bg-background border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-sm p-5 md:p-10 shadow-2xl relative flex flex-col md:flex-row gap-6 md:gap-8 my-auto"
             >
               <button 
                 onClick={() => setActiveArtwork(null)}
-                className="absolute top-4 right-4 text-muted hover:text-text p-2 rounded-full hover:bg-surface transition-colors"
+                className="absolute top-3 right-3 md:top-4 md:right-4 text-text hover:text-primary p-2.5 rounded-full bg-background/95 md:bg-transparent border border-border md:border-none shadow-md md:shadow-none transition-colors z-40 cursor-pointer"
                 aria-label="Close modal"
               >
                 <X className="w-6 h-6" />
@@ -572,26 +587,33 @@ const SKETCH_ELEMENTS = [
                     <Sparkles className="w-3 h-3" />
                     {activeArtwork.commissionStatus}
                   </div>
-                  <h2 className="font-serif text-3xl md:text-4xl text-text mb-2 font-normal">{activeArtwork.title}</h2>
-                  <div className="font-sans text-sm text-muted mb-6 flex items-center gap-4">
+                  <h2 className="font-serif text-2xl md:text-4xl text-text mb-2 font-normal">{activeArtwork.title}</h2>
+                  <div className="font-sans text-sm text-muted mb-4 md:mb-6 flex items-center gap-4">
                     <span>{activeArtwork.medium}</span>
                     <span>•</span>
                     <span>{activeArtwork.year}</span>
                   </div>
-                  <p className="font-sans text-text/80 text-base leading-relaxed mb-8 font-light">
+                  <p className="font-sans text-text/80 text-sm md:text-base leading-relaxed mb-6 md:mb-8 font-light">
                     {activeArtwork.description}
                   </p>
                 </div>
 
-                <div className="border-t border-border pt-6 mt-4">
+                <div className="border-t border-border pt-5 mt-2 space-y-2.5">
                   <button 
                     onClick={() => handleGetSimilar(activeArtwork)}
-                    className="w-full py-4 bg-primary text-background font-sans uppercase tracking-widest text-sm font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2 shadow-md"
+                    className="w-full py-3.5 md:py-4 bg-primary text-background font-sans uppercase tracking-widest text-xs md:text-sm font-medium hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2 shadow-md"
                   >
                     <span>Get Something Similar</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
-                  <p className="text-center text-xs text-muted font-sans mt-3">
+                  <button
+                    onClick={() => setActiveArtwork(null)}
+                    className="w-full py-3 bg-surface text-text font-sans uppercase tracking-widest text-xs font-medium hover:bg-surface/80 transition-colors duration-300 md:hidden flex items-center justify-center gap-1.5 border border-border rounded-xs"
+                  >
+                    <X className="w-4 h-4 text-primary" />
+                    <span>Close View</span>
+                  </button>
+                  <p className="text-center text-xs text-muted font-sans mt-2">
                     Directs you to the commission form with this piece as reference.
                   </p>
                 </div>
