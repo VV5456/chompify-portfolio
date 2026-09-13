@@ -411,7 +411,7 @@ const SKETCH_ELEMENTS = [
       </div>
 
       {/* SECTION 2: Infinite Horizontal Artwork Marquee Banner (Deep Mahogany #611f10 Stream) */}
-      <div id="portfolio-marquee" className="w-full -mx-6 md:-mx-12 my-20 md:my-32 py-20 md:py-28 bg-[#611f10] text-background overflow-hidden border-y border-[#611f10]/30 shadow-xl scroll-mt-20 md:scroll-mt-24">
+      <div id="portfolio-marquee" className="w-screen relative left-1/2 -translate-x-1/2 md:static md:w-full md:left-0 md:translate-x-0 md:-mx-12 my-20 md:my-32 py-20 md:py-28 bg-[#611f10] text-background overflow-hidden border-y border-[#611f10]/30 shadow-xl scroll-mt-20 md:scroll-mt-24">
         <div className="max-w-[1550px] mx-auto px-6 md:px-12 mb-8 md:mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5 sm:gap-0 font-mono text-[11px] sm:text-xs text-background/80 uppercase tracking-widest">
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-background animate-pulse shrink-0" />
