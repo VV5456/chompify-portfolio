@@ -563,10 +563,10 @@ const SKETCH_ELEMENTS = [
               onClick={(e) => e.stopPropagation()}
               className="bg-background border border-border max-w-4xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-y-auto rounded-sm p-4 sm:p-6 md:p-10 shadow-2xl relative flex flex-col md:flex-row gap-6 md:gap-8 my-auto"
             >
-              {/* Sticky top-right close button so it remains visible when scrolling down on mobile */}
+              {/* Top-Right Close Button for Modal */}
               <button 
                 onClick={() => setActiveArtwork(null)}
-                className="sticky top-0 right-0 self-end -mb-10 text-text hover:text-primary p-2.5 rounded-full bg-background/95 border border-border md:border-none shadow-md md:shadow-none transition-colors z-40 cursor-pointer"
+                className="absolute top-3 right-3 md:top-4 md:right-4 text-text hover:text-primary p-2 rounded-full bg-background/90 md:bg-transparent border border-border md:border-none shadow-md md:shadow-none transition-colors z-50 cursor-pointer"
                 aria-label="Close modal"
               >
                 <X className="w-6 h-6" />
