@@ -12,6 +12,7 @@ interface PortfolioGalleryProps {
 
 export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryProps) {
   const [activeArtwork, setActiveArtwork] = useState<Artwork | null>(null);
+  const [activeSketchId, setActiveSketchId] = useState<string | null>(null);
 
   // Lock body scroll and handle Escape key when modal is open
   useEffect(() => {
@@ -274,6 +275,7 @@ const SKETCH_ELEMENTS = [
   // --- TOP LEFT QUADRANT ---
   {
     id: "grimoire_1",
+    name: "Grimoire & Dagger",
     src: "/sketches/grimoire_dagger.png",
     alt: "Grimoire with Dagger Sketch",
     className: "top-[2%] left-[2%] sm:left-[4%] w-[70px] sm:w-[95px] md:w-[115px] -rotate-12",
@@ -283,6 +285,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "sword_1",
+    name: "Ornate Rapier",
     src: "/sketches/ornate_sword.png",
     alt: "Ornate Rapier Sword Sketch",
     className: "top-[3%] left-[22%] sm:left-[25%] w-[32px] sm:w-[45px] md:w-[58px] rotate-6",
@@ -292,6 +295,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "key_1",
+    name: "Antique Key",
     src: "/sketches/antique_key.png",
     alt: "Antique Skeleton Key Sketch",
     className: "top-[28%] left-[1%] sm:left-[3%] w-[26px] sm:w-[36px] md:w-[45px] -rotate-[30deg]",
@@ -301,6 +305,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "crescent_2",
+    name: "Crescent Scimitar",
     src: "/sketches/crescent_blade.png",
     alt: "Crescent Scimitar Blade Sketch",
     className: "top-[48%] left-[12%] sm:left-[15%] w-[30px] sm:w-[42px] md:w-[52px] -rotate-[35deg]",
@@ -310,6 +315,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "candle_1",
+    name: "Candlestick",
     src: "/sketches/candlestick.png",
     alt: "Candlestick & Flame Sketch",
     className: "bottom-[2%] left-[2%] sm:left-[4%] w-[38px] sm:w-[50px] md:w-[62px] -rotate-6",
@@ -321,6 +327,7 @@ const SKETCH_ELEMENTS = [
   // --- TOP RIGHT QUADRANT ---
   {
     id: "clouds_1",
+    name: "Celestial Sun & Clouds",
     src: "/sketches/celestial_clouds.png",
     alt: "Celestial Sun & Clouds Sketch",
     className: "top-[2%] right-[22%] sm:right-[25%] w-[70px] sm:w-[100px] md:w-[120px] -rotate-3",
@@ -330,6 +337,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "crescent_1",
+    name: "Crescent Blade",
     src: "/sketches/crescent_blade.png",
     alt: "Crescent Scimitar Blade Sketch",
     className: "top-[3%] right-[2%] sm:right-[4%] w-[36px] sm:w-[52px] md:w-[66px] rotate-[15deg]",
@@ -339,6 +347,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "mirror_1",
+    name: "Cracked Mirror",
     src: "/sketches/cracked_mirror.png",
     alt: "Cracked Oval Mirror Sketch",
     className: "top-[32%] right-[1%] sm:right-[3%] w-[45px] sm:w-[65px] md:w-[82px] rotate-6",
@@ -348,6 +357,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "sword_2",
+    name: "Ornate Sword",
     src: "/sketches/ornate_sword.png",
     alt: "Ornate Rapier Sword Sketch",
     className: "top-[52%] right-[12%] sm:right-[15%] w-[28px] sm:w-[40px] md:w-[50px] -rotate-[15deg]",
@@ -359,6 +369,7 @@ const SKETCH_ELEMENTS = [
   // --- BOTTOM QUADRANT & CORNERS ---
   {
     id: "key_2",
+    name: "Skeleton Key",
     src: "/sketches/antique_key.png",
     alt: "Antique Skeleton Key Sketch",
     className: "bottom-[26%] right-[1%] sm:right-[3%] w-[24px] sm:w-[34px] md:w-[42px] rotate-[40deg]",
@@ -368,6 +379,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "candle_2",
+    name: "Candle Flame",
     src: "/sketches/candlestick.png",
     alt: "Candlestick Sketch",
     className: "bottom-[2%] left-[24%] sm:left-[28%] w-[32px] sm:w-[44px] md:w-[55px] rotate-[12deg]",
@@ -377,6 +389,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "wings",
+    name: "Feathered Wings",
     src: "/sketches/feathered_wings.png",
     alt: "Feathered Wings Sketch",
     className: "bottom-[0%] left-[50%] -translate-x-1/2 w-[50px] sm:w-[72px] md:w-[90px] rotate-3",
@@ -386,6 +399,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "clouds_2",
+    name: "Celestial Clouds",
     src: "/sketches/celestial_clouds.png",
     alt: "Celestial Clouds Sketch",
     className: "bottom-[2%] right-[22%] sm:right-[26%] w-[60px] sm:w-[85px] md:w-[100px] rotate-6",
@@ -395,6 +409,7 @@ const SKETCH_ELEMENTS = [
   },
   {
     id: "floral",
+    name: "Floral Flourish",
     src: "/sketches/floral_flourish.png",
     alt: "Floral Blossom Flourish Sketch",
     className: "bottom-[2%] right-[2%] sm:right-[4%] w-[55px] sm:w-[78px] md:w-[95px] rotate-12",
@@ -420,9 +435,10 @@ const SKETCH_ELEMENTS = [
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="absolute bottom-0 sm:bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5] uppercase tracking-[0.22em] pointer-events-none z-10"
+          className="absolute bottom-0 sm:bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5] uppercase tracking-[0.22em] pointer-events-none z-10 whitespace-nowrap"
         >
-          <span>Hover elements to explore sketches</span>
+          <span className="sm:hidden">Tap or hover elements to explore sketches</span>
+          <span className="hidden sm:inline">Hover elements to explore sketches</span>
         </motion.div>
 
         {/* Soft Ambient Background Glow */}
@@ -435,38 +451,57 @@ const SKETCH_ELEMENTS = [
         />
 
         {/* Individual Authentic Hand-Drawn Item Sketches (Balanced Watermark Backdrop) */}
-        {SKETCH_ELEMENTS.map((item) => (
-          <motion.div
-            key={item.id}
-            style={{ y: logoY }}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ 
-              opacity: [0.20, 0.32, 0.20], 
-              scale: 1,
-              translateY: item.floatY
-            }}
-            whileHover={{ 
-              opacity: 0.8, 
-              scale: 1.12, 
-              transition: { duration: 0.25, ease: "easeOut" } 
-            }}
-            transition={{ 
-              opacity: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
-              translateY: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
-              scale: { duration: 0.8, delay: item.delay }
-            }}
-            className={`absolute ${item.className} opacity-20 hover:opacity-85 transition-all cursor-pointer z-20 hover:z-30 pointer-events-auto group/sketch`}
-          >
-            <Image 
-              src={item.src}
-              alt={item.alt}
-              width={160}
-              height={160}
-              unoptimized
-              className="w-full h-auto object-contain select-none pointer-events-none filter contrast-110 brightness-95 transition-all duration-300 group-hover/sketch:contrast-135 group-hover/sketch:brightness-85"
-            />
-          </motion.div>
-        ))}
+        {SKETCH_ELEMENTS.map((item) => {
+          const isItemActive = activeSketchId === item.id;
+          return (
+            <motion.div
+              key={item.id}
+              style={{ y: logoY }}
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ 
+                opacity: isItemActive ? 0.95 : [0.20, 0.32, 0.20], 
+                scale: isItemActive ? 1.15 : 1,
+                translateY: item.floatY
+              }}
+              whileHover={{ 
+                opacity: 0.8, 
+                scale: 1.12, 
+                transition: { duration: 0.25, ease: "easeOut" } 
+              }}
+              transition={{ 
+                opacity: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
+                translateY: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
+                scale: { duration: 0.8, delay: item.delay }
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveSketchId(prev => prev === item.id ? null : item.id);
+              }}
+              className={`absolute ${item.className} ${
+                isItemActive ? "opacity-95 z-30 scale-115" : "opacity-20 hover:opacity-85 z-20 hover:z-30"
+              } transition-all cursor-pointer pointer-events-auto group/sketch`}
+            >
+              <Image 
+                src={item.src}
+                alt={item.alt}
+                width={160}
+                height={160}
+                unoptimized
+                className={`w-full h-auto object-contain select-none pointer-events-none filter transition-all duration-300 ${
+                  isItemActive 
+                    ? "contrast-140 brightness-80" 
+                    : "contrast-110 brightness-95 group-hover/sketch:contrast-135 group-hover/sketch:brightness-85"
+                }`}
+              />
+              {/* Floating Tooltip Label on Hover or Tap */}
+              <span className={`absolute -bottom-6 left-1/2 -translate-x-1/2 transition-opacity duration-200 pointer-events-none whitespace-nowrap bg-background/95 border border-primary/30 text-text font-mono text-[10px] px-2.5 py-0.5 rounded-full shadow-md z-30 tracking-wider font-medium ${
+                isItemActive ? "opacity-100" : "opacity-0 group-hover/sketch:opacity-100"
+              }`}>
+                {item.name}
+              </span>
+            </motion.div>
+          );
+        })}
 
         {/* Ambient Floating Sparkle Accents - Repositioned into clear negative space */}
         <motion.div 
