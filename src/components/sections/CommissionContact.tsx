@@ -8,16 +8,17 @@ import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  email: z.string().email("Valid email is required"),
+  name: z.string().trim().min(2, "Name is required (at least 2 characters)").max(100, "Name must be 100 characters or less"),
+  email: z.string().trim().email("Valid email address is required").max(150, "Email must be 150 characters or less"),
   preferredContactMethod: z.string().optional(),
-  customPlatform: z.string().optional(),
-  contactHandle: z.string().optional(),
-  idea: z.string().min(10, "Please tell me a little bit about your idea"),
+  customPlatform: z.string().trim().max(50, "Platform name is too long").optional(),
+  contactHandle: z.string().trim().max(100, "Handle is too long").optional(),
+  idea: z.string().trim().min(10, "Please tell me a little bit about your idea (at least 10 characters)").max(3000, "Idea description is too long (max 3000 characters)"),
   budget: z.string().optional(),
-  deadline: z.string().optional(),
-  referenceArtwork: z.string().optional(),
+  deadline: z.string().trim().max(100, "Timeline description is too long").optional(),
+  referenceArtwork: z.string().trim().max(200, "Reference links are too long").optional(),
   additionalNotes: z.string().optional(),
+  website: z.string().optional(),
 });
 
 interface CommissionContactProps {
@@ -33,6 +34,7 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
     resolver: zodResolver(formSchema),
     defaultValues: {
       preferredContactMethod: "Email",
+      website: "",
     }
   });
 
@@ -64,6 +66,7 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
           idea: data.idea,
           deadline: data.deadline || "",
           referenceArtwork: data.referenceArtwork || "",
+          website: data.website || "",
         }),
       });
 
@@ -135,6 +138,17 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
 
         <div className="md:w-7/12 w-full">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 font-sans">
+            {/* Accessibility-safe visually-hidden honeypot anti-bot field */}
+            <div className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden -z-50" aria-hidden="true">
+              <label htmlFor="website">Website</label>
+              <input
+                id="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                {...register("website")}
+              />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs uppercase tracking-wider text-text mb-1.5 font-medium">Your Name *</label>

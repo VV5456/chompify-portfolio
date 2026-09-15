@@ -1,6 +1,48 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+// Rate Limit Configuration: 3 submissions per IP address per 10 minutes
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const MAX_REQUESTS_PER_WINDOW = 3;
+const ipRequestMap = new Map<string, number[]>();
+
+function getClientIp(request: Request): string {
+  const xff = request.headers.get("x-forwarded-for");
+  if (xff) {
+    return xff.split(",")[0].trim();
+  }
+  const xRealIp = request.headers.get("x-real-ip");
+  if (xRealIp) {
+    return xRealIp.trim();
+  }
+  return "127.0.0.1";
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const windowStart = now - RATE_LIMIT_WINDOW_MS;
+  const timestamps = (ipRequestMap.get(ip) || []).filter((t) => t > windowStart);
+
+  if (timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+    ipRequestMap.set(ip, timestamps);
+    return false; // Limit exceeded
+  }
+
+  timestamps.push(now);
+  ipRequestMap.set(ip, timestamps);
+
+  // Periodic LRU cleanup to prevent memory bloat in warm lambdas
+  if (ipRequestMap.size > 1000) {
+    for (const [key, times] of ipRequestMap.entries()) {
+      if (times.every((t) => t <= windowStart)) {
+        ipRequestMap.delete(key);
+      }
+    }
+  }
+
+  return true; // Allowed
+}
+
 const commissionSchema = z
   .object({
     name: z
@@ -17,16 +59,17 @@ const commissionSchema = z
       .string()
       .trim()
       .min(1, "Preferred contact method is required")
-      .max(50, "Preferred contact method is invalid"),
-    customPlatform: z.string().trim().max(100, "Platform name is too long").optional().default(""),
+      .max(30, "Preferred contact method is invalid"),
+    customPlatform: z.string().trim().max(50, "Platform name is too long").optional().default(""),
     contactHandle: z.string().trim().max(100, "Handle is too long").optional().default(""),
     idea: z
       .string()
       .trim()
       .min(10, "Please tell me a little bit about your idea (at least 10 characters)")
-      .max(5000, "Idea description is too long (max 5000 characters)"),
-    deadline: z.string().trim().max(200, "Timeline description is too long").optional().default(""),
-    referenceArtwork: z.string().trim().max(1000, "Reference links are too long").optional().default(""),
+      .max(3000, "Idea description is too long (max 3000 characters)"),
+    deadline: z.string().trim().max(100, "Timeline description is too long").optional().default(""),
+    referenceArtwork: z.string().trim().max(200, "Reference links are too long").optional().default(""),
+    website: z.string().optional().default(""),
   })
   .superRefine((data, ctx) => {
     const method = data.preferredContactMethod;
@@ -59,6 +102,26 @@ const commissionSchema = z
 
 export async function POST(request: Request) {
   try {
+    // 1. Request Body Size Protection (Limit to max 15KB)
+    const contentLength = request.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > 15360) {
+      console.warn("[Commission API Security] Oversized request payload blocked.");
+      return NextResponse.json(
+        { success: false, error: "Request body exceeds maximum size limit." },
+        { status: 413 }
+      );
+    }
+
+    // 2. Rate Limiting Check (3 submissions per IP / 10 min)
+    const clientIp = getClientIp(request);
+    if (!checkRateLimit(clientIp)) {
+      console.warn("[Commission API Security] Rate limit exceeded for request.");
+      return NextResponse.json(
+        { success: false, error: "Too many submission attempts. Please wait a few minutes and try again." },
+        { status: 429 }
+      );
+    }
+
     let body: unknown;
     try {
       body = await request.json();
@@ -69,6 +132,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // 3. Server-Side Zod Validation
     const validationResult = commissionSchema.safeParse(body);
     if (!validationResult.success) {
       const firstError = validationResult.error.issues[0]?.message || "Validation failed.";
@@ -80,6 +144,16 @@ export async function POST(request: Request) {
 
     const validatedData = validationResult.data;
 
+    // 4. Honeypot Anti-Bot Inspection
+    if (validatedData.website && validatedData.website.trim().length > 0) {
+      console.warn("[Commission API Security] Bot submission rejected via honeypot.");
+      return NextResponse.json(
+        { success: false, error: "Invalid submission request." },
+        { status: 400 }
+      );
+    }
+
+    // 5. Server Secret Handling
     const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
     const appsScriptToken = process.env.GOOGLE_APPS_SCRIPT_TOKEN;
 
@@ -91,6 +165,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // Forward ONLY validated data (excluding honeypot) and server token
     const payload = {
       token: appsScriptToken,
       name: validatedData.name,
@@ -122,7 +197,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Extract safe non-sensitive diagnostic parameters for logging
+    // Safe diagnostic parameters for logging (no user PII or tokens logged)
     let finalHost = "unknown";
     try {
       if (appsScriptResponse.url) {
@@ -189,12 +264,10 @@ export async function POST(request: Request) {
     }
 
     // 2. Handle Google Apps Script ContentService redirect outcome:
-    // When Google Apps Script writes to Sheet, it responds with a redirect to script.googleusercontent.com.
     const isGoogleUserContent = finalHost.includes("googleusercontent.com");
     const isScriptDomain = finalHost.includes("script.google.com");
 
     if (appsScriptResponse.ok || appsScriptResponse.redirected || isGoogleUserContent) {
-      // Check for explicit error text from Google Apps Script engine
       const hasEngineError =
         responseText.includes("Exception:") ||
         responseText.includes("Script error") ||
@@ -209,15 +282,13 @@ export async function POST(request: Request) {
         );
       }
 
-      // Successful write to Google Sheet
       return NextResponse.json({ success: true });
     }
 
     // 3. Genuine non-2xx failure directly from script.google.com without redirect
     if (!appsScriptResponse.ok && isScriptDomain) {
       console.error(
-        `[Commission API Error] Google Apps Script returned status ${appsScriptResponse.status}. Body preview:`,
-        responseText.substring(0, 300)
+        `[Commission API Error] Google Apps Script returned status ${appsScriptResponse.status}.`
       );
 
       return NextResponse.json(
