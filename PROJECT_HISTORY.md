@@ -303,6 +303,7 @@ All hero sketch icons highlight individually when hovered or tapped.
 | `312f1a1` | 2026-09-15 | Vedansh Vaidya | Added tap toggle interaction & responsive prompt text for mobile |
 | `da663bf` | 2026-09-15 | Vedansh Vaidya | Removed bottom text tooltips under hero sketch elements |
 | `4ec3f71` | 2026-09-15 | Vedansh Vaidya | Implemented production hardening pass (honeypot, rate limit, size limit) |
+| `28b587f` | 2026-09-15 | Vedansh Vaidya | Revamped README with badges, architecture diagram, and project history |
 
 ---
 
