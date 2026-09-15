@@ -112,6 +112,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify(payload),
         redirect: "follow",
+        cache: "no-store",
       });
     } catch (fetchError) {
       console.error("[Commission API Error] Network request to Google Apps Script failed:", fetchError);
@@ -121,29 +122,107 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!appsScriptResponse.ok) {
-      console.error(`[Commission API Error] Google Apps Script returned status ${appsScriptResponse.status}`);
-      return NextResponse.json(
-        { success: false, error: "External service error. Please try again later." },
-        { status: 502 }
-      );
-    }
-
-    let responseData: { success?: boolean; error?: string; message?: string } = {};
+    // Extract safe non-sensitive diagnostic parameters for logging
+    let finalHost = "unknown";
     try {
-      const responseText = await appsScriptResponse.text();
-      if (responseText) {
-        responseData = JSON.parse(responseText);
+      if (appsScriptResponse.url) {
+        finalHost = new URL(appsScriptResponse.url).host;
       }
     } catch {
-      // If response body is not JSON but HTTP status is 200 OK, consider it successful
+      finalHost = "unknown";
+    }
+
+    console.log("[Commission API Diagnostic]", {
+      status: appsScriptResponse.status,
+      statusText: appsScriptResponse.statusText,
+      ok: appsScriptResponse.ok,
+      redirected: appsScriptResponse.redirected,
+      finalHost,
+      contentType: appsScriptResponse.headers.get("content-type"),
+    });
+
+    let responseText = "";
+    try {
+      responseText = await appsScriptResponse.text();
+    } catch (textErr) {
+      console.warn("[Commission API Warning] Could not read response text:", textErr);
+    }
+
+    let isJson = false;
+    let responseData: Record<string, unknown> = {};
+    if (responseText) {
+      try {
+        responseData = JSON.parse(responseText);
+        isJson = true;
+      } catch {
+        isJson = false;
+      }
+    }
+
+    // 1. Evaluate structured JSON response if available
+    if (isJson) {
+      const isExplicitFailure =
+        responseData.success === false ||
+        responseData.status === "error" ||
+        responseData.result === "error";
+
+      if (isExplicitFailure) {
+        const errorMsg =
+          typeof responseData.error === "string"
+            ? responseData.error
+            : typeof responseData.message === "string"
+            ? responseData.message
+            : "Submission failed at Google Apps Script.";
+
+        return NextResponse.json({ success: false, error: errorMsg }, { status: 400 });
+      }
+
+      const isExplicitSuccess =
+        responseData.success === true ||
+        responseData.status === "success" ||
+        responseData.result === "success" ||
+        responseData.ok === true;
+
+      if (isExplicitSuccess) {
+        return NextResponse.json({ success: true });
+      }
+    }
+
+    // 2. Handle Google Apps Script ContentService redirect outcome:
+    // When Google Apps Script writes to Sheet, it responds with a redirect to script.googleusercontent.com.
+    const isGoogleUserContent = finalHost.includes("googleusercontent.com");
+    const isScriptDomain = finalHost.includes("script.google.com");
+
+    if (appsScriptResponse.ok || appsScriptResponse.redirected || isGoogleUserContent) {
+      // Check for explicit error text from Google Apps Script engine
+      const hasEngineError =
+        responseText.includes("Exception:") ||
+        responseText.includes("Script error") ||
+        responseText.includes("Google Drive - Error") ||
+        responseText.includes("Unauthorized");
+
+      if (hasEngineError) {
+        console.error("[Commission API Error] Engine error detected in response text.");
+        return NextResponse.json(
+          { success: false, error: "External service error. Please try again later." },
+          { status: 502 }
+        );
+      }
+
+      // Successful write to Google Sheet
       return NextResponse.json({ success: true });
     }
 
-    if (responseData.success === false) {
+    // 3. Genuine non-2xx failure directly from script.google.com without redirect
+    if (!appsScriptResponse.ok && isScriptDomain) {
+      console.error(
+        `[Commission API Error] Google Apps Script returned status ${appsScriptResponse.status}. Body preview:`,
+        responseText.substring(0, 300)
+      );
+
       return NextResponse.json(
-        { success: false, error: responseData.error || "Submission failed at Google Apps Script." },
-        { status: 400 }
+        { success: false, error: "External service error. Please try again later." },
+        { status: 502 }
       );
     }
 

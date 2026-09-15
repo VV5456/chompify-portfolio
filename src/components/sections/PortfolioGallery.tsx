@@ -65,33 +65,51 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   // Interactive Marquee Ref & State
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isInteracting = useRef(false);
+  const scrollPosRef = useRef(0);
+  const lastTimeRef = useRef<number | null>(null);
+
+  // Mouse drag specific refs for desktop drag
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
-  const scrollPosRef = useRef(0);
+  const isMouseDown = useRef(false);
 
-  // Auto scroll animation frame
+  // Auto scroll animation frame ref & speed in pixels per second
   const animFrameId = useRef<number | null>(null);
-  const autoScrollSpeed = 0.6; // Base constant marquee speed
+  const autoScrollSpeed = 38; // Pixels per second for silky smooth continuous movement
 
   useEffect(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
 
     scrollPosRef.current = el.scrollLeft;
+    lastTimeRef.current = null;
 
-    const autoScroll = () => {
-      if (!isInteracting.current && el) {
-        scrollPosRef.current += autoScrollSpeed;
-        const maxScroll = el.scrollWidth / 3;
-        if (maxScroll > 0) {
-          if (scrollPosRef.current >= maxScroll * 2) {
-            scrollPosRef.current -= maxScroll;
-          } else if (scrollPosRef.current <= 0) {
-            scrollPosRef.current += maxScroll;
+    const autoScroll = (time: number) => {
+      if (!isInteracting.current && !isMouseDown.current && el) {
+        if (lastTimeRef.current !== null) {
+          // Time delta in seconds between frames
+          const dt = (time - lastTimeRef.current) / 1000;
+          // Cap dt to max 0.1s to avoid jumps on tab switch/lag spikes
+          const safeDt = Math.min(dt, 0.1);
+
+          scrollPosRef.current += autoScrollSpeed * safeDt;
+          const maxScroll = el.scrollWidth / 3;
+
+          if (maxScroll > 0) {
+            if (scrollPosRef.current >= maxScroll * 2) {
+              scrollPosRef.current -= maxScroll;
+            } else if (scrollPosRef.current <= 0) {
+              scrollPosRef.current += maxScroll;
+            }
           }
+
+          el.scrollLeft = scrollPosRef.current;
         }
-        el.scrollLeft = scrollPosRef.current;
+        lastTimeRef.current = time;
+      } else {
+        lastTimeRef.current = null;
       }
+
       animFrameId.current = requestAnimationFrame(autoScroll);
     };
 
@@ -103,17 +121,34 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   }, []);
 
   const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      const currentScroll = scrollContainerRef.current.scrollLeft;
-      if (isInteracting.current || Math.abs(currentScroll - scrollPosRef.current) > 4) {
-        scrollPosRef.current = currentScroll;
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
+    const currentScroll = el.scrollLeft;
+    const maxScroll = el.scrollWidth / 3;
+
+    // Infinite loop wrap during manual scroll
+    if (maxScroll > 0) {
+      if (currentScroll >= maxScroll * 2) {
+        el.scrollLeft = currentScroll - maxScroll;
+        scrollPosRef.current = el.scrollLeft;
+        return;
+      } else if (currentScroll <= 0) {
+        el.scrollLeft = currentScroll + maxScroll;
+        scrollPosRef.current = el.scrollLeft;
+        return;
       }
+    }
+
+    // Sync position when user is interacting or during native momentum scroll
+    if (isInteracting.current || isMouseDown.current || Math.abs(currentScroll - scrollPosRef.current) > 2) {
+      scrollPosRef.current = currentScroll;
     }
   };
 
-  // Mouse drag handlers for direct horizontal scroll input
+  // Mouse drag handlers for desktop
   const handleMouseDown = (e: React.MouseEvent) => {
-    isInteracting.current = true;
+    isMouseDown.current = true;
     if (!scrollContainerRef.current) return;
     startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
     scrollLeftStart.current = scrollContainerRef.current.scrollLeft;
@@ -121,45 +156,41 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   };
 
   const handleMouseLeaveOrUp = () => {
-    isInteracting.current = false;
+    isMouseDown.current = false;
     if (scrollContainerRef.current) {
       scrollPosRef.current = scrollContainerRef.current.scrollLeft;
     }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isInteracting.current || !scrollContainerRef.current) return;
+    if (!isMouseDown.current || !scrollContainerRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.8;
+    const walk = (x - startX.current) * 1.5;
     const newScroll = scrollLeftStart.current - walk;
     scrollContainerRef.current.scrollLeft = newScroll;
     scrollPosRef.current = newScroll;
   };
 
-  // Touch event handlers for mobile interaction
-  const handleTouchStart = (e: React.TouchEvent) => {
+  // Touch event handlers for mobile interaction (uses native hardware-accelerated touch scroll)
+  const handleTouchStart = () => {
     isInteracting.current = true;
-    if (!scrollContainerRef.current || e.touches.length === 0) return;
-    startX.current = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
-    scrollLeftStart.current = scrollContainerRef.current.scrollLeft;
-    scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-  };
-
-  const handleTouchEnd = () => {
-    isInteracting.current = false;
     if (scrollContainerRef.current) {
       scrollPosRef.current = scrollContainerRef.current.scrollLeft;
     }
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isInteracting.current || !scrollContainerRef.current || e.touches.length === 0) return;
-    const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.8;
-    const newScroll = scrollLeftStart.current - walk;
-    scrollContainerRef.current.scrollLeft = newScroll;
-    scrollPosRef.current = newScroll;
+  const handleTouchEnd = () => {
+    if (scrollContainerRef.current) {
+      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+    }
+    // Allow native momentum inertia to complete smoothly before resuming auto-scroll
+    setTimeout(() => {
+      isInteracting.current = false;
+      if (scrollContainerRef.current) {
+        scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+      }
+    }, 200);
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -479,8 +510,7 @@ const SKETCH_ELEMENTS = [
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
-          onTouchMove={handleTouchMove}
-          className="relative w-full overflow-x-auto no-scrollbar flex py-8 cursor-grab active:cursor-grabbing select-none"
+          className="relative w-full overflow-x-auto no-scrollbar flex py-8 cursor-grab active:cursor-grabbing select-none touch-pan-x"
         >
           <div className="flex items-center flex-nowrap min-w-max">
             {marqueeArtworks.map((art, idx) => {
