@@ -493,12 +493,6 @@ const SKETCH_ELEMENTS = [
                     : "contrast-110 brightness-95 group-hover/sketch:contrast-135 group-hover/sketch:brightness-85"
                 }`}
               />
-              {/* Floating Tooltip Label on Hover or Tap */}
-              <span className={`absolute -bottom-6 left-1/2 -translate-x-1/2 transition-opacity duration-200 pointer-events-none whitespace-nowrap bg-background/95 border border-primary/30 text-text font-mono text-[10px] px-2.5 py-0.5 rounded-full shadow-md z-30 tracking-wider font-medium ${
-                isItemActive ? "opacity-100" : "opacity-0 group-hover/sketch:opacity-100"
-              }`}>
-                {item.name}
-              </span>
             </motion.div>
           );
         })}
