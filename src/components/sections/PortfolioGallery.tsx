@@ -65,17 +65,23 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   // Interactive Marquee Ref & State
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isInteracting = useRef(false);
+  const isMouseDown = useRef(false);
   const scrollPosRef = useRef(0);
   const lastTimeRef = useRef<number | null>(null);
 
-  // Mouse drag specific refs for desktop drag
+  // Smooth momentum velocity & speed refs
+  const baseAutoScrollSpeed = 38; // Pixels per second continuous auto-scroll speed
+  const currentVelocityRef = useRef(baseAutoScrollSpeed); // Active scrolling velocity (px/s)
+  
+  // Touch & Drag velocity tracking refs
+  const lastXRef = useRef(0);
+  const lastTimeTrackRef = useRef(0);
+  const trackedVelocityRef = useRef(0);
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
-  const isMouseDown = useRef(false);
 
-  // Auto scroll animation frame ref & speed in pixels per second
+  // Auto scroll animation frame ref
   const animFrameId = useRef<number | null>(null);
-  const autoScrollSpeed = 38; // Pixels per second for silky smooth continuous movement
 
   useEffect(() => {
     const el = scrollContainerRef.current;
@@ -85,29 +91,37 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
     lastTimeRef.current = null;
 
     const autoScroll = (time: number) => {
-      if (!isInteracting.current && !isMouseDown.current && el) {
+      if (el) {
         if (lastTimeRef.current !== null) {
           // Time delta in seconds between frames
           const dt = (time - lastTimeRef.current) / 1000;
           // Cap dt to max 0.1s to avoid jumps on tab switch/lag spikes
           const safeDt = Math.min(dt, 0.1);
 
-          scrollPosRef.current += autoScrollSpeed * safeDt;
-          const maxScroll = el.scrollWidth / 3;
+          if (!isInteracting.current && !isMouseDown.current) {
+            // Smooth exponential friction deceleration towards baseAutoScrollSpeed (38 px/s)
+            const frictionRate = 2.2;
+            const blend = Math.exp(-frictionRate * safeDt);
+            currentVelocityRef.current = currentVelocityRef.current * blend + baseAutoScrollSpeed * (1 - blend);
 
-          if (maxScroll > 0) {
-            if (scrollPosRef.current >= maxScroll * 2) {
-              scrollPosRef.current -= maxScroll;
-            } else if (scrollPosRef.current <= 0) {
-              scrollPosRef.current += maxScroll;
+            scrollPosRef.current += currentVelocityRef.current * safeDt;
+
+            const maxScroll = el.scrollWidth / 3;
+            if (maxScroll > 0) {
+              if (scrollPosRef.current >= maxScroll * 2) {
+                scrollPosRef.current -= maxScroll;
+              } else if (scrollPosRef.current <= 0) {
+                scrollPosRef.current += maxScroll;
+              }
             }
-          }
 
-          el.scrollLeft = scrollPosRef.current;
+            el.scrollLeft = scrollPosRef.current;
+          } else {
+            // During active touch/mouse interaction, keep scrollPosRef synced with el.scrollLeft
+            scrollPosRef.current = el.scrollLeft;
+          }
         }
         lastTimeRef.current = time;
-      } else {
-        lastTimeRef.current = null;
       }
 
       animFrameId.current = requestAnimationFrame(autoScroll);
@@ -140,8 +154,7 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
       }
     }
 
-    // Sync position when user is interacting or during native momentum scroll
-    if (isInteracting.current || isMouseDown.current || Math.abs(currentScroll - scrollPosRef.current) > 2) {
+    if (isInteracting.current || isMouseDown.current) {
       scrollPosRef.current = currentScroll;
     }
   };
@@ -153,13 +166,10 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
     startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
     scrollLeftStart.current = scrollContainerRef.current.scrollLeft;
     scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-  };
 
-  const handleMouseLeaveOrUp = () => {
-    isMouseDown.current = false;
-    if (scrollContainerRef.current) {
-      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-    }
+    lastXRef.current = e.pageX;
+    lastTimeTrackRef.current = performance.now();
+    trackedVelocityRef.current = 0;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -170,27 +180,76 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
     const newScroll = scrollLeftStart.current - walk;
     scrollContainerRef.current.scrollLeft = newScroll;
     scrollPosRef.current = newScroll;
+
+    const now = performance.now();
+    const dt = (now - lastTimeTrackRef.current) / 1000;
+    if (dt > 0.008) {
+      const dx = e.pageX - lastXRef.current;
+      const instVelocity = -dx / dt;
+      trackedVelocityRef.current = trackedVelocityRef.current * 0.3 + instVelocity * 0.7;
+      lastXRef.current = e.pageX;
+      lastTimeTrackRef.current = now;
+    }
   };
 
-  // Touch event handlers for mobile interaction (uses native hardware-accelerated touch scroll)
-  const handleTouchStart = () => {
+  const handleMouseLeaveOrUp = () => {
+    if (isMouseDown.current) {
+      isMouseDown.current = false;
+      if (scrollContainerRef.current) {
+        scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+      }
+      const maxVelocity = 2200;
+      const initialVelocity = Math.max(-maxVelocity, Math.min(maxVelocity, trackedVelocityRef.current));
+      if (Math.abs(initialVelocity) > 20) {
+        currentVelocityRef.current = initialVelocity;
+      }
+    }
+  };
+
+  // Touch event handlers for mobile interaction with smooth momentum physics
+  const handleTouchStart = (e: React.TouchEvent) => {
     isInteracting.current = true;
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      lastXRef.current = touch.clientX;
+      lastTimeTrackRef.current = performance.now();
+      trackedVelocityRef.current = 0;
+    }
+    if (scrollContainerRef.current) {
+      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isInteracting.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const now = performance.now();
+    const dt = (now - lastTimeTrackRef.current) / 1000;
+
+    if (dt > 0.008) {
+      const dx = touch.clientX - lastXRef.current;
+      const instVelocity = -dx / dt;
+      trackedVelocityRef.current = trackedVelocityRef.current * 0.3 + instVelocity * 0.7;
+      lastXRef.current = touch.clientX;
+      lastTimeTrackRef.current = now;
+    }
+
     if (scrollContainerRef.current) {
       scrollPosRef.current = scrollContainerRef.current.scrollLeft;
     }
   };
 
   const handleTouchEnd = () => {
+    isInteracting.current = false;
     if (scrollContainerRef.current) {
       scrollPosRef.current = scrollContainerRef.current.scrollLeft;
     }
-    // Allow native momentum inertia to complete smoothly before resuming auto-scroll
-    setTimeout(() => {
-      isInteracting.current = false;
-      if (scrollContainerRef.current) {
-        scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-      }
-    }, 200);
+
+    const maxVelocity = 2200;
+    const initialVelocity = Math.max(-maxVelocity, Math.min(maxVelocity, trackedVelocityRef.current));
+    if (Math.abs(initialVelocity) > 20) {
+      currentVelocityRef.current = initialVelocity;
+    }
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -508,6 +567,7 @@ const SKETCH_ELEMENTS = [
           onMouseLeave={handleMouseLeaveOrUp}
           onMouseMove={handleMouseMove}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
           className="relative w-full overflow-x-auto no-scrollbar flex py-8 cursor-grab active:cursor-grabbing select-none touch-pan-x"
