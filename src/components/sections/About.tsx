@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Sparkles } from "lucide-react";
 
 export default function About() {
   return (
@@ -8,7 +9,7 @@ export default function About() {
           
           {/* Left Column (Artist Portrait Moment) */}
           <div className="lg:col-span-5 max-w-[430px] w-full mx-auto lg:mx-0">
-            <div className="relative aspect-[3/4] w-full bg-surface overflow-hidden rounded-xs">
+            <div className="relative aspect-[3/4] w-full bg-surface overflow-hidden rounded-xs group cursor-pointer border border-text/10 hover:border-primary/30 transition-colors duration-500">
               <Image 
                 src="/about/portrait.jpeg" 
                 alt="Saanvi — Digital Artist" 
@@ -16,6 +17,15 @@ export default function About() {
                 className="object-cover transition-all duration-700 grayscale hover:grayscale-0 hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 35vw"
               />
+
+              {/* Subtle Floating Visual Prompt Badge */}
+              <div className="absolute bottom-3 right-3 pointer-events-none z-10">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-background/80 text-muted/80 border border-text/10 backdrop-blur-xs font-mono text-[10px] uppercase tracking-wider transition-all duration-500 group-hover:bg-primary group-hover:text-background group-hover:border-primary group-hover:shadow-md">
+                  <Sparkles className="w-2.5 h-2.5 text-primary group-hover:text-background transition-colors" />
+                  <span className="group-hover:hidden">Hover to reveal color</span>
+                  <span className="hidden group-hover:inline">Color Revealed</span>
+                </span>
+              </div>
             </div>
             <div className="mt-4 flex justify-between font-mono text-xs text-muted/60 uppercase">
               <span>Saanvi</span>

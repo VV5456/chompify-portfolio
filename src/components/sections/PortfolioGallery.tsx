@@ -414,6 +414,17 @@ const SKETCH_ELEMENTS = [
         ref={heroRef}
         className="relative max-w-[1550px] mx-auto mb-12 md:mb-20 min-h-[75vh] md:min-h-[85vh] flex flex-col items-center justify-center text-center overflow-visible"
       >
+        {/* Subtle Theme-Aligned Visual Aid Prompt Text */}
+        <motion.div 
+          style={{ y: logoY }}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="absolute bottom-0 sm:bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5] uppercase tracking-[0.22em] pointer-events-none z-10"
+        >
+          <span>Hover elements to explore sketches</span>
+        </motion.div>
+
         {/* Soft Ambient Background Glow */}
         <motion.div 
           style={{ y: bgGlowY }}
@@ -423,20 +434,20 @@ const SKETCH_ELEMENTS = [
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[600px] md:w-[950px] h-[220px] sm:h-[380px] md:h-[500px] bg-gradient-to-r from-primary/20 via-amber-600/15 to-primary/20 rounded-full blur-[90px] md:blur-[120px] pointer-events-none -z-10" 
         />
 
-        {/* Individual Authentic Hand-Drawn Item Sketches (Subtle Outer Watermark Backdrop) */}
+        {/* Individual Authentic Hand-Drawn Item Sketches (Balanced Watermark Backdrop) */}
         {SKETCH_ELEMENTS.map((item) => (
           <motion.div
             key={item.id}
             style={{ y: logoY }}
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ 
-              opacity: [0.14, 0.24, 0.14], 
+              opacity: [0.20, 0.32, 0.20], 
               scale: 1,
               translateY: item.floatY
             }}
             whileHover={{ 
-              opacity: 0.6, 
-              scale: 1.1, 
+              opacity: 0.8, 
+              scale: 1.12, 
               transition: { duration: 0.25, ease: "easeOut" } 
             }}
             transition={{ 
@@ -444,7 +455,7 @@ const SKETCH_ELEMENTS = [
               translateY: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
               scale: { duration: 0.8, delay: item.delay }
             }}
-            className={`absolute ${item.className} opacity-15 hover:opacity-60 transition-opacity cursor-pointer z-0 pointer-events-auto`}
+            className={`absolute ${item.className} opacity-20 hover:opacity-85 transition-all cursor-pointer z-20 hover:z-30 pointer-events-auto group/sketch`}
           >
             <Image 
               src={item.src}
@@ -452,7 +463,7 @@ const SKETCH_ELEMENTS = [
               width={160}
               height={160}
               unoptimized
-              className="w-full h-auto object-contain select-none pointer-events-none"
+              className="w-full h-auto object-contain select-none pointer-events-none filter contrast-110 brightness-95 transition-all duration-300 group-hover/sketch:contrast-135 group-hover/sketch:brightness-85"
             />
           </motion.div>
         ))}
@@ -484,13 +495,13 @@ const SKETCH_ELEMENTS = [
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.025 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="relative w-full max-w-[500px] sm:max-w-[700px] md:max-w-[850px] lg:max-w-[950px] aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] filter drop-shadow-2xl cursor-pointer group z-10"
+          className="relative w-full max-w-[500px] sm:max-w-[700px] md:max-w-[850px] lg:max-w-[950px] aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] filter drop-shadow-2xl cursor-pointer group z-10 pointer-events-none"
         >
           <Image 
             src="/artworks/BrandLogo.PNG"
             alt="Chompify Brand Logo"
             fill
-            className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01]"
+            className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01] pointer-events-auto"
             priority
           />
         </motion.div>
