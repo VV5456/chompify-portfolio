@@ -368,7 +368,7 @@ The following core features have been fully implemented, verified, and pushed to
 
 ---
 
-## How to Update This Document
+## How and When to Update This Document
 
 Future agents and developers MUST follow these instructions when updating `PROJECT_HISTORY.md`:
 
