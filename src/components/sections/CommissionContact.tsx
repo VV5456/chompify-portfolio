@@ -246,7 +246,7 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
                 {...register("idea")} 
                 rows={3}
                 className="w-full bg-surface border border-border p-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
-                placeholder="Tell me about your idea, character, mood, color preferences, or story..."
+                placeholder="Tell me about your idea, (headshot/ bust/ full body), background vision, mood, story, etc."
               />
               {errors.idea && <span className="text-red-500 text-xs mt-1 block">{errors.idea.message}</span>}
             </div>
@@ -294,8 +294,8 @@ export default function CommissionContact({ selectedArtwork }: CommissionContact
               </div>
             )}
 
-            <div className="pt-1 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-muted/80 font-sans">
+            <div className="pt-2 flex flex-col items-start sm:items-end gap-2.5">
+              <p className="text-xs text-muted/80 font-sans whitespace-nowrap">
                 By submitting this form, you agree to the{" "}
                 <a 
                   href="#terms" 

@@ -98,8 +98,8 @@ export default function Navigation() {
           {[
             { label: "Portfolio", id: "portfolio" },
             { label: "Pricing", id: "pricing" },
-            { label: "About", id: "about" },
-            { label: "Commission", id: "contact" }
+            { label: "Commission", id: "contact" },
+            { label: "About", id: "about" }
           ].map((item) => (
             <button
               key={item.id}
@@ -140,8 +140,8 @@ export default function Navigation() {
               {[
                 { label: "Portfolio", id: "portfolio" },
                 { label: "Pricing", id: "pricing" },
-                { label: "About", id: "about" },
-                { label: "Commission", id: "contact" }
+                { label: "Commission", id: "contact" },
+                { label: "About", id: "about" }
               ].map((item) => (
                 <button
                   key={item.id}

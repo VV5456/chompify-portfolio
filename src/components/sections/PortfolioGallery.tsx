@@ -429,16 +429,33 @@ const SKETCH_ELEMENTS = [
         ref={heroRef}
         className="relative max-w-[1550px] mx-auto mb-12 md:mb-20 min-h-[75vh] md:min-h-[85vh] flex flex-col items-center justify-center text-center overflow-visible"
       >
-        {/* Subtle Theme-Aligned Visual Aid Prompt Text */}
+        {/* Subtle Theme-Aligned Visual Aid Prompt & Editorial Scroll Cue */}
         <motion.div 
           style={{ y: logoY }}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="absolute bottom-0 sm:bottom-2 left-1/2 -translate-x-1/2 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5] uppercase tracking-[0.22em] pointer-events-none z-10 whitespace-nowrap"
+          className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5]/80 uppercase tracking-[0.24em] pointer-events-none select-none z-10 whitespace-nowrap"
         >
-          <span className="sm:hidden">Tap or hover elements to explore sketches</span>
-          <span className="hidden sm:inline">Hover elements to explore sketches</span>
+          <div>
+            <span className="sm:hidden">Tap or hover elements to explore sketches</span>
+            <span className="hidden sm:inline">Hover elements to explore sketches</span>
+          </div>
+
+          <div className="flex items-center gap-1 text-text/75 font-medium">
+            <span>Scroll To Explore</span>
+            <motion.span
+              animate={{ y: [0, 2.5, 0] }}
+              transition={{
+                duration: 2.4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="inline-block text-[10px] sm:text-xs font-semibold"
+            >
+              ↓
+            </motion.span>
+          </div>
         </motion.div>
 
         {/* Soft Ambient Background Glow */}

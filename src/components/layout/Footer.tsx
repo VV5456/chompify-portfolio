@@ -1,6 +1,54 @@
+"use client";
+
 import Image from "next/image";
 
 export default function Footer() {
+  const scrollTo = (id: string) => {
+    if (id === "portfolio") {
+      const el = document.getElementById("portfolio-marquee") || document.getElementById("portfolio");
+      if (el) {
+        const navbarOffset = 60;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - navbarOffset,
+          behavior: "smooth"
+        });
+        return;
+      }
+    }
+
+    if (id === "pricing") {
+      const el = document.getElementById("pricing-grid") || document.getElementById("pricing");
+      if (el) {
+        const navbarOffset = 90;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - navbarOffset,
+          behavior: "smooth"
+        });
+        return;
+      }
+    }
+
+    if (id === "contact") {
+      const el = document.getElementById("contact");
+      if (el) {
+        const navbarOffset = 70;
+        const elementTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementTop - navbarOffset,
+          behavior: "smooth"
+        });
+        return;
+      }
+    }
+
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <footer className="bg-surface/60 border-t border-text/10 pt-24 pb-16">
       <div className="max-w-[1550px] mx-auto px-6 md:px-12 flex flex-col justify-between min-h-[300px]">
@@ -24,10 +72,42 @@ export default function Footer() {
           <div className="md:col-span-4 flex flex-col md:flex-row justify-between md:justify-end gap-12 font-sans text-xs uppercase tracking-widest pt-4 sm:pt-6">
             <div className="space-y-3">
               <span className="font-mono text-muted/50 block mb-2">Navigation</span>
-              <div><a href="#portfolio" className="text-text/80 hover:text-primary transition-colors">Portfolio</a></div>
-              <div><a href="#pricing" className="text-text/80 hover:text-primary transition-colors">Pricing</a></div>
-              <div><a href="#about" className="text-text/80 hover:text-primary transition-colors">About</a></div>
-              <div><a href="#contact" className="text-text/80 hover:text-primary transition-colors">Commission</a></div>
+              <div>
+                <a 
+                  href="#portfolio-marquee" 
+                  onClick={(e) => { e.preventDefault(); scrollTo("portfolio"); }}
+                  className="text-text/80 hover:text-primary transition-colors cursor-pointer"
+                >
+                  Portfolio
+                </a>
+              </div>
+              <div>
+                <a 
+                  href="#pricing" 
+                  onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}
+                  className="text-text/80 hover:text-primary transition-colors cursor-pointer"
+                >
+                  Pricing
+                </a>
+              </div>
+              <div>
+                <a 
+                  href="#contact" 
+                  onClick={(e) => { e.preventDefault(); scrollTo("contact"); }}
+                  className="text-text/80 hover:text-primary transition-colors cursor-pointer"
+                >
+                  Commission
+                </a>
+              </div>
+              <div>
+                <a 
+                  href="#about" 
+                  onClick={(e) => { e.preventDefault(); scrollTo("about"); }}
+                  className="text-text/80 hover:text-primary transition-colors cursor-pointer"
+                >
+                  About
+                </a>
+              </div>
             </div>
 
             <div className="space-y-3">

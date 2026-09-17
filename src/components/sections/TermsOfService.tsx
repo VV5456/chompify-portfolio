@@ -24,7 +24,7 @@ export default function TermsOfService() {
               Terms of Service
             </h2>
           </div>
-          <p className="font-sans text-xs md:text-sm text-text/80 max-w-xl leading-relaxed">
+          <p className="font-sans text-[clamp(8.5px,2.1vw,14px)] text-text/80 whitespace-nowrap tracking-tight leading-relaxed overflow-hidden">
             Please read the following before commissioning me. By placing an order, you agree to these terms.
           </p>
         </div>
@@ -58,6 +58,10 @@ export default function TermsOfService() {
                 <li className="flex items-start gap-1.5">
                   <span className="text-primary font-bold select-none">•</span>
                   <span>All prices are listed in <strong className="text-primary font-semibold">USD</strong>.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <span className="text-primary font-bold select-none">•</span>
+                  <span>Add payment through either Paypal or VGen</span>
                 </li>
               </ul>
             </div>

@@ -221,7 +221,7 @@ export default function Pricing() {
             <div className="lg:col-span-7 space-y-6">
               <div>
                 <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold block mb-1">
-                  Adjustments
+                  Details & Usage
                 </span>
                 <h3 className="font-serif text-2xl md:text-3xl text-text font-normal">
                   Additional Options & Fees
