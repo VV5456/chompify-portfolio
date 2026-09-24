@@ -12,17 +12,17 @@ export interface Artwork {
 export const ARTWORKS: Artwork[] = [
   { 
     id: "royal", 
-    title: "Royal", 
+    title: "Royalty", 
     medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 1,
-    commissionStatus: "Commissioned Work",
+    commissionStatus: "Personal Piece",
     description: "An elegant character study featuring ornate regal details, rich warm tones, and intricate digital textures.",
     imageSrc: "/artworks/Royal.JPG" 
   },
   { 
     id: "river-walk", 
-    title: "River Walk", 
+    title: "The Lady by the Lotus Lake", 
     medium: "Digital Art", 
     year: "2026", 
     depthLayer: 2,
@@ -32,7 +32,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "blue-hair", 
-    title: "Blue Hair", 
+    title: "The Blue-haired Queen", 
     medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 1,
@@ -42,7 +42,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "portrait", 
-    title: "Portrait Study", 
+    title: "Calm Before the Storm", 
     medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 1,
@@ -52,7 +52,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "ravana", 
-    title: "Ravana", 
+    title: "Rani, The Protector", 
     medium: "Digital Illustration", 
     year: "2026", 
     depthLayer: 1,
@@ -112,7 +112,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "img-0933", 
-    title: "Echoes of Summer", 
+    title: "I see you", 
     medium: "Digital Art", 
     year: "2026", 
     depthLayer: 1,
@@ -132,7 +132,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "img-0961", 
-    title: "Astral Whispers", 
+    title: "Girls' night out", 
     medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 2,
@@ -142,7 +142,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "img-1023", 
-    title: "Solitude in Bloom", 
+    title: "windows to the soul", 
     medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 3,
@@ -152,7 +152,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "img-1129", 
-    title: "Midnight Fantasy", 
+    title: "Intertwined", 
     medium: "Digital Illustration", 
     year: "2026", 
     depthLayer: 2,
@@ -162,7 +162,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "img-1150", 
-    title: "Celestial Glow", 
+    title: "grumpy x sunshine", 
     medium: "Digital Illustration", 
     year: "2026", 
     depthLayer: 2,
@@ -172,7 +172,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "untitled-artwork-main", 
-    title: "Luminous Horizon", 
+    title: "Royal portrait", 
     medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 1,
@@ -182,7 +182,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "untitled-artwork-1", 
-    title: "Whispers of Dawn", 
+    title: "The bittersweet threat", 
     medium: "Digital Art", 
     year: "2026", 
     depthLayer: 2,
@@ -192,7 +192,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "untitled-artwork-2", 
-    title: "Vivid Essence", 
+    title: "The Artist", 
     medium: "Digital Illustration", 
     year: "2026", 
     depthLayer: 3,
@@ -202,7 +202,7 @@ export const ARTWORKS: Artwork[] = [
   },
   { 
     id: "a1dff15b", 
-    title: "Enchanted Passages", 
+    title: "Sand and Scales", 
     medium: "Digital Art", 
     year: "2026", 
     depthLayer: 3,
@@ -242,7 +242,7 @@ export const PRICING_CATEGORIES: PricingCategory[] = [
     flatColours: 50,
     fullRender: 70,
     bgImage: "/artworks/IMG_0961.PNG",
-    bgTitle: "Astral Whispers",
+    bgTitle: "Girls' night out",
   },
   {
     id: "full-body",
@@ -252,7 +252,7 @@ export const PRICING_CATEGORIES: PricingCategory[] = [
     flatColours: 70,
     fullRender: 90,
     bgImage: "/artworks/Untitled_Artwork.png",
-    bgTitle: "Luminous Horizon",
+    bgTitle: "Royal portrait",
   },
 ];
 
