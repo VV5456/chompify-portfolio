@@ -79,7 +79,7 @@ export default function Navigation() {
       <div className="max-w-[1550px] mx-auto px-6 md:px-12 flex justify-between items-center">
         {/* Studio Brand Header */}
         <div 
-          className="group flex items-baseline gap-3 cursor-pointer select-none" 
+          className="group flex items-baseline gap-2 cursor-pointer select-none" 
           onClick={() => {
             setMobileMenuOpen(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -88,8 +88,8 @@ export default function Navigation() {
           <span className="font-serif text-2xl md:text-3xl font-normal tracking-wide text-text group-hover:text-primary transition-colors duration-300">
             CHOMPIFY
           </span>
-          <span className="hidden sm:inline font-sans text-[10px] tracking-widest text-muted/70 uppercase">
-            — Saanvi
+          <span className="hidden sm:inline font-sans text-[10px] tracking-widest text-muted/70">
+            by SAANVI
           </span>
         </div>
         
