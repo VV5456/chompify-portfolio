@@ -60,71 +60,90 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   // Remaining artworks for sequential editorial layouts
   const remainingArtworks = ARTWORKS.slice(3);
 
-  // Triplicated array for seamless infinite marquee loop & scroll buffer
-  const marqueeArtworks = [...ARTWORKS, ...ARTWORKS, ...ARTWORKS];
+  // Duplicated array for seamless infinite marquee loop (Set 1 + Set 2)
+  const marqueeArtworks = [...ARTWORKS, ...ARTWORKS];
 
   // Interactive Marquee Ref & State
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const offsetRef = useRef(0);
+  const halfWidthRef = useRef(0);
+
   const isInteracting = useRef(false);
   const isMouseDown = useRef(false);
-  const scrollPosRef = useRef(0);
-  const lastTimeRef = useRef<number | null>(null);
+
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isTouchHorizontal = useRef<boolean | null>(null);
 
   // Smooth momentum velocity & speed refs
   const baseAutoScrollSpeed = 38; // Pixels per second continuous auto-scroll speed
   const currentVelocityRef = useRef(baseAutoScrollSpeed); // Active scrolling velocity (px/s)
-  
+
   // Touch & Drag velocity tracking refs
   const lastXRef = useRef(0);
   const lastTimeTrackRef = useRef(0);
   const trackedVelocityRef = useRef(0);
-  const startX = useRef(0);
-  const scrollLeftStart = useRef(0);
 
   // Auto scroll animation frame ref
   const animFrameId = useRef<number | null>(null);
+  const lastTimeRef = useRef<number | null>(null);
 
+  // ResizeObserver to calculate track width dynamically
   useEffect(() => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
+    const updateWidth = () => {
+      if (trackRef.current) {
+        halfWidthRef.current = trackRef.current.scrollWidth / 2;
+      }
+    };
 
-    scrollPosRef.current = el.scrollLeft;
+    updateWidth();
+
+    const ro = new ResizeObserver(updateWidth);
+    if (trackRef.current) {
+      ro.observe(trackRef.current);
+    }
+    window.addEventListener("resize", updateWidth);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
+
+  // Compositor-friendly GPU transform loop for seamless infinite auto-scroll
+  useEffect(() => {
     lastTimeRef.current = null;
 
     const autoScroll = (time: number) => {
-      if (el) {
-        if (lastTimeRef.current !== null) {
-          // Time delta in seconds between frames
-          const dt = (time - lastTimeRef.current) / 1000;
-          // Cap dt to max 0.1s to avoid jumps on tab switch/lag spikes
-          const safeDt = Math.min(dt, 0.1);
+      if (lastTimeRef.current !== null) {
+        // Time delta in seconds between frames
+        const dt = Math.min((time - lastTimeRef.current) / 1000, 0.1);
 
-          if (!isInteracting.current && !isMouseDown.current) {
-            // Smooth exponential friction deceleration towards baseAutoScrollSpeed (38 px/s)
-            const frictionRate = 2.2;
-            const blend = Math.exp(-frictionRate * safeDt);
-            currentVelocityRef.current = currentVelocityRef.current * blend + baseAutoScrollSpeed * (1 - blend);
+        if (!isInteracting.current && !isMouseDown.current) {
+          // Smooth exponential friction deceleration towards baseAutoScrollSpeed (38 px/s)
+          const frictionRate = 2.2;
+          const blend = Math.exp(-frictionRate * dt);
+          currentVelocityRef.current = currentVelocityRef.current * blend + baseAutoScrollSpeed * (1 - blend);
 
-            scrollPosRef.current += currentVelocityRef.current * safeDt;
+          offsetRef.current += currentVelocityRef.current * dt;
 
-            const maxScroll = el.scrollWidth / 3;
-            if (maxScroll > 0) {
-              if (scrollPosRef.current >= maxScroll * 2) {
-                scrollPosRef.current -= maxScroll;
-              } else if (scrollPosRef.current <= 0) {
-                scrollPosRef.current += maxScroll;
-              }
+          const halfW = halfWidthRef.current;
+          if (halfW > 0) {
+            if (offsetRef.current >= halfW) {
+              offsetRef.current -= halfW;
+            } else if (offsetRef.current < 0) {
+              offsetRef.current += halfW;
             }
+          }
 
-            el.scrollLeft = scrollPosRef.current;
-          } else {
-            // During active touch/mouse interaction, keep scrollPosRef synced with el.scrollLeft
-            scrollPosRef.current = el.scrollLeft;
+          if (trackRef.current) {
+            trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0px, 0px)`;
           }
         }
-        lastTimeRef.current = time;
       }
-
+      lastTimeRef.current = time;
       animFrameId.current = requestAnimationFrame(autoScroll);
     };
 
@@ -135,60 +154,37 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
     };
   }, []);
 
-  const handleScroll = () => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
-
-    const currentScroll = el.scrollLeft;
-    const maxScroll = el.scrollWidth / 3;
-
-    // Infinite loop wrap during manual scroll
-    if (maxScroll > 0) {
-      if (currentScroll >= maxScroll * 2) {
-        el.scrollLeft = currentScroll - maxScroll;
-        scrollPosRef.current = el.scrollLeft;
-        return;
-      } else if (currentScroll <= 0) {
-        el.scrollLeft = currentScroll + maxScroll;
-        scrollPosRef.current = el.scrollLeft;
-        return;
-      }
-    }
-
-    if (isInteracting.current || isMouseDown.current) {
-      scrollPosRef.current = currentScroll;
-    }
-  };
-
   // Mouse drag handlers for desktop
   const handleMouseDown = (e: React.MouseEvent) => {
     isMouseDown.current = true;
-    if (!scrollContainerRef.current) return;
-    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
-    scrollLeftStart.current = scrollContainerRef.current.scrollLeft;
-    scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-
-    lastXRef.current = e.pageX;
+    lastXRef.current = e.clientX;
     lastTimeTrackRef.current = performance.now();
     trackedVelocityRef.current = 0;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDown.current || !scrollContainerRef.current) return;
+    if (!isMouseDown.current) return;
     e.preventDefault();
-    const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5;
-    const newScroll = scrollLeftStart.current - walk;
-    scrollContainerRef.current.scrollLeft = newScroll;
-    scrollPosRef.current = newScroll;
+    const dx = e.clientX - lastXRef.current;
+    lastXRef.current = e.clientX;
+
+    offsetRef.current -= dx * 1.2;
+
+    const halfW = halfWidthRef.current;
+    if (halfW > 0) {
+      if (offsetRef.current >= halfW) offsetRef.current -= halfW;
+      else if (offsetRef.current < 0) offsetRef.current += halfW;
+    }
+
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0px, 0px)`;
+    }
 
     const now = performance.now();
     const dt = (now - lastTimeTrackRef.current) / 1000;
     if (dt > 0.008) {
-      const dx = e.pageX - lastXRef.current;
       const instVelocity = -dx / dt;
       trackedVelocityRef.current = trackedVelocityRef.current * 0.3 + instVelocity * 0.7;
-      lastXRef.current = e.pageX;
       lastTimeTrackRef.current = now;
     }
   };
@@ -196,9 +192,6 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   const handleMouseLeaveOrUp = () => {
     if (isMouseDown.current) {
       isMouseDown.current = false;
-      if (scrollContainerRef.current) {
-        scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-      }
       const maxVelocity = 2200;
       const initialVelocity = Math.max(-maxVelocity, Math.min(maxVelocity, trackedVelocityRef.current));
       if (Math.abs(initialVelocity) > 20) {
@@ -207,67 +200,98 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
     }
   };
 
-  // Touch event handlers for mobile interaction with smooth momentum physics
+  // Direction-gated touch event handlers for mobile interaction
   const handleTouchStart = (e: React.TouchEvent) => {
-    isInteracting.current = true;
-    if (e.touches.length > 0) {
-      const touch = e.touches[0];
-      lastXRef.current = touch.clientX;
-      lastTimeTrackRef.current = performance.now();
-      trackedVelocityRef.current = 0;
-    }
-    if (scrollContainerRef.current) {
-      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
-    }
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartX.current = touch.clientX;
+    touchStartY.current = touch.clientY;
+    lastXRef.current = touch.clientX;
+    lastTimeTrackRef.current = performance.now();
+    trackedVelocityRef.current = 0;
+    isTouchHorizontal.current = null;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isInteracting.current || e.touches.length === 0) return;
+    if (e.touches.length !== 1) return;
     const touch = e.touches[0];
-    const now = performance.now();
-    const dt = (now - lastTimeTrackRef.current) / 1000;
 
-    if (dt > 0.008) {
-      const dx = touch.clientX - lastXRef.current;
-      const instVelocity = -dx / dt;
-      trackedVelocityRef.current = trackedVelocityRef.current * 0.3 + instVelocity * 0.7;
-      lastXRef.current = touch.clientX;
-      lastTimeTrackRef.current = now;
+    // Determine direction if not yet decided for this gesture
+    if (isTouchHorizontal.current === null) {
+      const absX = Math.abs(touch.clientX - touchStartX.current);
+      const absY = Math.abs(touch.clientY - touchStartY.current);
+      if (absX > 8 || absY > 8) {
+        if (absX > absY) {
+          isTouchHorizontal.current = true;
+          isInteracting.current = true;
+        } else {
+          isTouchHorizontal.current = false;
+          // Vertical scroll gesture — allow browser native page scroll freely
+        }
+      }
     }
 
-    if (scrollContainerRef.current) {
-      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+    // Only interact with marquee if confirmed horizontal gesture
+    if (isTouchHorizontal.current === true) {
+      const dx = touch.clientX - lastXRef.current;
+      lastXRef.current = touch.clientX;
+
+      offsetRef.current -= dx;
+
+      const halfW = halfWidthRef.current;
+      if (halfW > 0) {
+        if (offsetRef.current >= halfW) offsetRef.current -= halfW;
+        else if (offsetRef.current < 0) offsetRef.current += halfW;
+      }
+
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0px, 0px)`;
+      }
+
+      const now = performance.now();
+      const dt = (now - lastTimeTrackRef.current) / 1000;
+      if (dt > 0.008) {
+        const instVelocity = -dx / dt;
+        trackedVelocityRef.current = trackedVelocityRef.current * 0.3 + instVelocity * 0.7;
+        lastTimeTrackRef.current = now;
+      }
     }
   };
 
   const handleTouchEnd = () => {
-    isInteracting.current = false;
-    if (scrollContainerRef.current) {
-      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+    if (isTouchHorizontal.current === true) {
+      isInteracting.current = false;
+      const maxVelocity = 2200;
+      const initialVelocity = Math.max(-maxVelocity, Math.min(maxVelocity, trackedVelocityRef.current));
+      if (Math.abs(initialVelocity) > 20) {
+        currentVelocityRef.current = initialVelocity;
+      }
     }
-
-    const maxVelocity = 2200;
-    const initialVelocity = Math.max(-maxVelocity, Math.min(maxVelocity, trackedVelocityRef.current));
-    if (Math.abs(initialVelocity) > 20) {
-      currentVelocityRef.current = initialVelocity;
-    }
+    isTouchHorizontal.current = null;
   };
 
   const handleWheel = (e: React.WheelEvent) => {
-    if (scrollContainerRef.current && (e.deltaX !== 0 || Math.abs(e.deltaX) > Math.abs(e.deltaY))) {
-      scrollContainerRef.current.scrollLeft += e.deltaX;
-      scrollPosRef.current = scrollContainerRef.current.scrollLeft;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      offsetRef.current += e.deltaX;
+      const halfW = halfWidthRef.current;
+      if (halfW > 0) {
+        if (offsetRef.current >= halfW) offsetRef.current -= halfW;
+        else if (offsetRef.current < 0) offsetRef.current += halfW;
+      }
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0px, 0px)`;
+      }
     }
   };
 
   // Variations for Curved Moving Stream (Upright Pictures, Curved Wave Path, Spacing & Proportions)
   const MARQUEE_VARIATIONS = [
-    { offset: "-translate-y-6 md:-translate-y-10", aspect: "aspect-[3/4]", margin: "mr-8 md:mr-14", scale: "scale-95" },
-    { offset: "translate-y-4 md:translate-y-8", aspect: "aspect-[4/5]", margin: "mr-12 md:mr-16", scale: "scale-100" },
-    { offset: "-translate-y-3 md:-translate-y-5", aspect: "aspect-[3/4]", margin: "mr-6 md:mr-10", scale: "scale-[1.02]" },
-    { offset: "translate-y-6 md:translate-y-10", aspect: "aspect-[4/5]", margin: "mr-14 md:mr-20", scale: "scale-95" },
-    { offset: "-translate-y-5 md:-translate-y-8", aspect: "aspect-[3/4]", margin: "mr-10 md:mr-14", scale: "scale-100" },
-    { offset: "translate-y-3 md:translate-y-5", aspect: "aspect-[4/5]", margin: "mr-12 md:mr-16", scale: "scale-[1.03]" },
+    { offset: "-translate-y-4 md:-translate-y-10", aspect: "aspect-[3/4]", margin: "mr-8 md:mr-14", scale: "scale-95" },
+    { offset: "translate-y-3 md:translate-y-8", aspect: "aspect-[4/5]", margin: "mr-12 md:mr-16", scale: "scale-100" },
+    { offset: "-translate-y-2 md:-translate-y-5", aspect: "aspect-[3/4]", margin: "mr-6 md:mr-10", scale: "scale-[1.02]" },
+    { offset: "translate-y-4 md:translate-y-10", aspect: "aspect-[4/5]", margin: "mr-14 md:mr-20", scale: "scale-95" },
+    { offset: "-translate-y-3 md:-translate-y-8", aspect: "aspect-[3/4]", margin: "mr-10 md:mr-14", scale: "scale-100" },
+    { offset: "translate-y-2 md:translate-y-5", aspect: "aspect-[4/5]", margin: "mr-12 md:mr-16", scale: "scale-[1.03]" },
   ];
 
 // Hand-drawn sketch elements positioned cleanly with duplicated accents in negative space
@@ -617,7 +641,6 @@ const SKETCH_ELEMENTS = [
         {/* Marquee Interactive Stream Motion Container */}
         <div 
           ref={scrollContainerRef}
-          onScroll={handleScroll}
           onWheel={handleWheel}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseLeaveOrUp}
@@ -627,9 +650,12 @@ const SKETCH_ELEMENTS = [
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
-          className="relative w-full overflow-x-auto no-scrollbar flex py-8 cursor-grab active:cursor-grabbing select-none touch-pan-x"
+          className="relative w-full overflow-hidden flex py-8 cursor-grab active:cursor-grabbing select-none touch-pan-y"
         >
-          <div className="flex items-center flex-nowrap min-w-max">
+          <div 
+            ref={trackRef}
+            className="flex items-center flex-nowrap min-w-max will-change-transform"
+          >
             {marqueeArtworks.map((art, idx) => {
               const variation = MARQUEE_VARIATIONS[idx % MARQUEE_VARIATIONS.length];
               return (
@@ -643,8 +669,15 @@ const SKETCH_ELEMENTS = [
                       src={art.imageSrc} 
                       alt={art.title}
                       fill
+                      loading="lazy"
+                      decoding="async"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03] pointer-events-none"
                       sizes="360px"
+                      onLoad={() => {
+                        if (trackRef.current) {
+                          halfWidthRef.current = trackRef.current.scrollWidth / 2;
+                        }
+                      }}
                     />
                     <div className="absolute inset-0 bg-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <span className="bg-background text-text font-sans text-xs uppercase tracking-widest px-4 py-2 rounded-full shadow-md flex items-center gap-1.5 font-medium">
