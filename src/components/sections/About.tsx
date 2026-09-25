@@ -63,19 +63,19 @@ export default function About() {
                 • About the Artist
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-text font-normal leading-tight mb-6">
-                Hi! I&apos;m Chomp (Saanvi), a digital bookish illustrator.
+                Hi! I&apos;m Chomp (Saanvi), a 21 year old, Indian bookish Artist/Illustrator.
               </h2>
             </div>
 
             <div className="space-y-6 font-sans text-base md:text-lg text-text/80 leading-relaxed font-light">
               <p>
-                Specializing in semi-realistic portraits, character art, fantasy illustrations, and colourful artwork.
+                I specialise in semi-realistic portraits, stylised character art, fantasy illustrations, and colourful artwork. Every project is approached collaboratively - from discussing your vision and references to sharing sketches and updates throughout the process. At the end of the day, I want us to create something that feels true to your story.
               </p>
               <p>
-                Every project is approached collaboratively - from discussing your vision and references to sharing sketches and updates throughout the process. I use procreate for my work. My goal is to create artwork that feels true to your story.
+                I have been drawing for as long as I can remember, traditional art for more than 15 years and digital art for the last 5+ years. I started with the free software Krita, and eventually upgraded to my current art system which is the IPad and Procreate.
               </p>
               <p>
-                I would love it if you consider me for your project! I&apos;m excited to collaborate with you and bring your ideas to life. If you have any questions or custom requests, don&apos;t hesitate to reach out before placing an order.
+                I would love it if you consider me for your project! If you have any questions or custom requests, don&apos;t hesitate to reach out before placing an order. Thank you for supporting Chompify! xx
               </p>
             </div>
           </div>
