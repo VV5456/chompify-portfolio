@@ -31,14 +31,14 @@ export const ARTWORKS: Artwork[] = [
     imageSrc: "/artworks/River Walk.JPG" 
   },
   { 
-    id: "blue-hair", 
-    title: "The Blue-haired Queen", 
-    medium: "Digital Painting", 
+    id: "jude-and-cardan", 
+    title: "Jude & Cardan", 
+    medium: "Digital Illustration", 
     year: "2026", 
     depthLayer: 1,
-    commissionStatus: "Commissioned Work",
-    description: "Captivating portrait illustration featuring vibrant blue hair, expressive facial lighting, and smooth color transitions.",
-    imageSrc: "/artworks/Blue Hair.jpg" 
+    commissionStatus: "Personal Piece",
+    description: "",
+    imageSrc: "/artworks/Jude & Cardan.png" 
   },
   { 
     id: "portrait", 
@@ -181,14 +181,14 @@ export const ARTWORKS: Artwork[] = [
     imageSrc: "/artworks/IMG_1177.png" 
   },
   { 
-    id: "jude-and-cardan", 
-    title: "Jude & Cardan", 
-    medium: "Digital Illustration", 
+    id: "blue-hair", 
+    title: "The Blue-haired Queen", 
+    medium: "Digital Painting", 
     year: "2026", 
     depthLayer: 1,
-    commissionStatus: "Personal Piece",
-    description: "",
-    imageSrc: "/artworks/Jude & Cardan.png" 
+    commissionStatus: "Commissioned Work",
+    description: "Captivating portrait illustration featuring vibrant blue hair, expressive facial lighting, and smooth color transitions.",
+    imageSrc: "/artworks/Blue Hair.jpg" 
   },
   { 
     id: "untitled-artwork-3", 
