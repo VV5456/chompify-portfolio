@@ -593,7 +593,16 @@ const SKETCH_ELEMENTS = [
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               onClick={() => setActiveArtwork(art)}
-              className="group cursor-pointer flex flex-col justify-between"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActiveArtwork(art);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`View details for artwork ${art.title}`}
+              className="group cursor-pointer flex flex-col justify-between focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 rounded-xs"
             >
               <div className="relative w-full aspect-[4/5] bg-surface overflow-hidden rounded-xs border border-text/5 group-hover:border-primary/30 transition-colors duration-300">
                 <Image 
@@ -611,14 +620,9 @@ const SKETCH_ELEMENTS = [
               </div>
 
               <div className="mt-4 flex justify-between items-baseline font-sans">
-                <div>
-                  <h3 className="font-serif text-lg md:text-xl text-text group-hover:text-primary transition-colors font-normal">
-                    {art.title}
-                  </h3>
-                  <p className="text-xs text-muted/80 font-mono mt-0.5">
-                    {art.medium} • {art.year}
-                  </p>
-                </div>
+                <p className="text-xs text-muted/80 font-mono">
+                  {art.year}
+                </p>
                 <span className="font-mono text-xs text-muted/50">
                   0{idx + 1}
                 </span>
@@ -662,7 +666,16 @@ const SKETCH_ELEMENTS = [
                 <div
                   key={`${art.id}-marquee-${idx}`}
                   onClick={() => setActiveArtwork(art)}
-                  className={`group cursor-pointer flex-none w-[240px] sm:w-[300px] md:w-[360px] ${variation.margin} ${variation.offset} transition-transform duration-500`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setActiveArtwork(art);
+                    }
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`View details for artwork ${art.title}`}
+                  className={`group cursor-pointer flex-none w-[240px] sm:w-[300px] md:w-[360px] ${variation.margin} ${variation.offset} transition-transform duration-500 focus:outline-none focus:ring-2 focus:ring-background/60 rounded-xs`}
                 >
                   <div className={`relative w-full ${variation.aspect} ${variation.scale} bg-background/10 overflow-hidden rounded-xs border border-white/25 group-hover:border-background transition-all duration-300 shadow-xl`}>
                     <Image 
@@ -685,10 +698,7 @@ const SKETCH_ELEMENTS = [
                       </span>
                     </div>
                   </div>
-                  <div className="mt-3 flex justify-between items-baseline font-sans text-xs">
-                    <span className="font-serif text-base text-background group-hover:text-text transition-colors font-normal">
-                      {art.title}
-                    </span>
+                  <div className="mt-3 flex justify-end items-baseline font-sans text-xs">
                     <span className="font-mono text-background/70">{art.year}</span>
                   </div>
                 </div>
@@ -724,10 +734,6 @@ const SKETCH_ELEMENTS = [
 
               <div className="w-16 h-[1px] bg-primary/40" />
 
-              <p className="font-sans text-sm md:text-base text-text/80 leading-relaxed font-light">
-                {featuredArtwork.description}
-              </p>
-
               <div className="pt-4 border-t border-text/10 grid grid-cols-2 gap-4 font-mono text-xs">
                 <div>
                   <span className="text-muted/60 block mb-1">Medium</span>
@@ -747,7 +753,16 @@ const SKETCH_ELEMENTS = [
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.15 }}
               onClick={() => setActiveArtwork(featuredArtwork)}
-              className="lg:col-span-7 group cursor-pointer"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActiveArtwork(featuredArtwork);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`View details for artwork ${featuredArtwork.title}`}
+              className="lg:col-span-7 group cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 rounded-xs"
             >
               <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] bg-surface overflow-hidden rounded-xs border border-text/10 group-hover:border-primary/30 shadow-lg transition-colors duration-300">
                 <Image 
@@ -829,9 +844,6 @@ const SKETCH_ELEMENTS = [
                     <span>•</span>
                     <span>{activeArtwork.year}</span>
                   </div>
-                  <p className="font-sans text-text/80 text-sm md:text-base leading-relaxed mb-6 md:mb-8 font-light">
-                    {activeArtwork.description}
-                  </p>
                 </div>
 
                 <div className="border-t border-border pt-5 mt-2 space-y-2.5">
