@@ -171,6 +171,56 @@ export const ARTWORKS: Artwork[] = [
     imageSrc: "/artworks/IMG_1150.PNG" 
   },
   { 
+    id: "img-1177", 
+    title: "Sunlit Portrait", 
+    medium: "Digital Painting", 
+    year: "2026", 
+    depthLayer: 1,
+    commissionStatus: "Commissioned Work",
+    description: "",
+    imageSrc: "/artworks/IMG_1177.png" 
+  },
+  { 
+    id: "jude-and-cardan", 
+    title: "Jude & Cardan", 
+    medium: "Digital Illustration", 
+    year: "2026", 
+    depthLayer: 1,
+    commissionStatus: "Personal Piece",
+    description: "",
+    imageSrc: "/artworks/Jude & Cardan.png" 
+  },
+  { 
+    id: "untitled-artwork-3", 
+    title: "Untitled Artwork 3", 
+    medium: "Digital Art", 
+    year: "2026", 
+    depthLayer: 2,
+    commissionStatus: "Commissioned Work",
+    description: "",
+    imageSrc: "/artworks/Untitled_Artwork(3).png" 
+  },
+  { 
+    id: "untitled-artwork-5", 
+    title: "Untitled Artwork 5", 
+    medium: "Digital Painting", 
+    year: "2026", 
+    depthLayer: 3,
+    commissionStatus: "Commissioned Work",
+    description: "",
+    imageSrc: "/artworks/Untitled_Artwork(5).png" 
+  },
+  { 
+    id: "untitled-artwork-7", 
+    title: "Untitled Artwork 7", 
+    medium: "Digital Illustration", 
+    year: "2026", 
+    depthLayer: 1,
+    commissionStatus: "Commissioned Work",
+    description: "",
+    imageSrc: "/artworks/Untitled_Artwork(7).png" 
+  },
+  { 
     id: "untitled-artwork-main", 
     title: "Royal portrait", 
     medium: "Digital Painting", 
