@@ -37,10 +37,10 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
   });
 
   // Parallax upward translate & scale transition linked directly to user scrolling
-  const logoY = useTransform(scrollYProgress, [0, 1], ["0px", "-120px"]);
-  const logoScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
+  const logoY = useTransform(scrollYProgress, [0, 1], ["0px", "-160px"]);
+  const logoScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
   const logoOpacity = useTransform(scrollYProgress, [0, 0.85, 1], [1, 0.85, 0.2]);
-  const bgGlowY = useTransform(scrollYProgress, [0, 1], ["0px", "-60px"]);
+  const bgGlowY = useTransform(scrollYProgress, [0, 1], ["0px", "-80px"]);
 
   const handleGetSimilar = (art: Artwork) => {
     setActiveArtwork(null);
@@ -266,7 +266,7 @@ export default function PortfolioGallery({ onSelectSimilar }: PortfolioGalleryPr
     { offset: "translate-y-2 md:translate-y-5", aspect: "aspect-[4/5]", margin: "mr-12 md:mr-16", scale: "scale-[1.03]" },
   ];
 
-// Hand-drawn sketch elements positioned cleanly with GPU compositor float animations
+// Hand-drawn sketch elements positioned cleanly with duplicated accents in negative space
 const SKETCH_ELEMENTS = [
   // --- TOP LEFT QUADRANT ---
   {
@@ -275,7 +275,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/grimoire_dagger.png",
     alt: "Grimoire with Dagger Sketch",
     className: "top-[2%] left-[2%] sm:left-[4%] w-[70px] sm:w-[95px] md:w-[115px] -rotate-12",
-    floatClass: "animate-float-1"
+    delay: 0.1,
+    floatY: [-5, 5, -5],
+    duration: 5.5
   },
   {
     id: "sword_1",
@@ -283,7 +285,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/ornate_sword.png",
     alt: "Ornate Rapier Sword Sketch",
     className: "top-[3%] left-[22%] sm:left-[25%] w-[32px] sm:w-[45px] md:w-[58px] rotate-6",
-    floatClass: "animate-float-2"
+    delay: 0.25,
+    floatY: [-7, 3, -7],
+    duration: 6.2
   },
   {
     id: "key_1",
@@ -291,7 +295,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/antique_key.png",
     alt: "Antique Skeleton Key Sketch",
     className: "top-[28%] left-[1%] sm:left-[3%] w-[26px] sm:w-[36px] md:w-[45px] -rotate-[30deg]",
-    floatClass: "animate-float-3"
+    delay: 0.3,
+    floatY: [-4, 4, -4],
+    duration: 4.8
   },
   {
     id: "crescent_2",
@@ -299,7 +305,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/crescent_blade.png",
     alt: "Crescent Scimitar Blade Sketch",
     className: "top-[48%] left-[12%] sm:left-[15%] w-[30px] sm:w-[42px] md:w-[52px] -rotate-[35deg]",
-    floatClass: "animate-float-1"
+    delay: 0.35,
+    floatY: [4, -4, 4],
+    duration: 5.4
   },
   {
     id: "candle_1",
@@ -307,7 +315,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/candlestick.png",
     alt: "Candlestick & Flame Sketch",
     className: "bottom-[2%] left-[2%] sm:left-[4%] w-[38px] sm:w-[50px] md:w-[62px] -rotate-6",
-    floatClass: "animate-float-2"
+    delay: 0.4,
+    floatY: [3, -6, 3],
+    duration: 5.2
   },
 
   // --- TOP RIGHT QUADRANT ---
@@ -317,7 +327,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/celestial_clouds.png",
     alt: "Celestial Sun & Clouds Sketch",
     className: "top-[2%] right-[22%] sm:right-[25%] w-[70px] sm:w-[100px] md:w-[120px] -rotate-3",
-    floatClass: "animate-float-3"
+    delay: 0.2,
+    floatY: [-6, 4, -6],
+    duration: 6.5
   },
   {
     id: "crescent_1",
@@ -325,7 +337,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/crescent_blade.png",
     alt: "Crescent Scimitar Blade Sketch",
     className: "top-[3%] right-[2%] sm:right-[4%] w-[36px] sm:w-[52px] md:w-[66px] rotate-[15deg]",
-    floatClass: "animate-float-1"
+    delay: 0.15,
+    floatY: [4, -6, 4],
+    duration: 5.8
   },
   {
     id: "mirror_1",
@@ -333,7 +347,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/cracked_mirror.png",
     alt: "Cracked Oval Mirror Sketch",
     className: "top-[32%] right-[1%] sm:right-[3%] w-[45px] sm:w-[65px] md:w-[82px] rotate-6",
-    floatClass: "animate-float-2"
+    delay: 0.35,
+    floatY: [5, -5, 5],
+    duration: 6.0
   },
   {
     id: "sword_2",
@@ -341,7 +357,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/ornate_sword.png",
     alt: "Ornate Rapier Sword Sketch",
     className: "top-[52%] right-[12%] sm:right-[15%] w-[28px] sm:w-[40px] md:w-[50px] -rotate-[15deg]",
-    floatClass: "animate-float-3"
+    delay: 0.4,
+    floatY: [-5, 5, -5],
+    duration: 6.1
   },
 
   // --- BOTTOM QUADRANT & CORNERS ---
@@ -351,7 +369,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/antique_key.png",
     alt: "Antique Skeleton Key Sketch",
     className: "bottom-[26%] right-[1%] sm:right-[3%] w-[24px] sm:w-[34px] md:w-[42px] rotate-[40deg]",
-    floatClass: "animate-float-1"
+    delay: 0.45,
+    floatY: [-4, 4, -4],
+    duration: 5.1
   },
   {
     id: "candle_2",
@@ -359,7 +379,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/candlestick.png",
     alt: "Candlestick Sketch",
     className: "bottom-[2%] left-[24%] sm:left-[28%] w-[32px] sm:w-[44px] md:w-[55px] rotate-[12deg]",
-    floatClass: "animate-float-2"
+    delay: 0.48,
+    floatY: [4, -4, 4],
+    duration: 5.6
   },
   {
     id: "wings",
@@ -367,7 +389,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/feathered_wings.png",
     alt: "Feathered Wings Sketch",
     className: "bottom-[0%] left-[50%] -translate-x-1/2 w-[50px] sm:w-[72px] md:w-[90px] rotate-3",
-    floatClass: "animate-float-3"
+    delay: 0.45,
+    floatY: [-5, 5, -5],
+    duration: 5.9
   },
   {
     id: "clouds_2",
@@ -375,7 +399,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/celestial_clouds.png",
     alt: "Celestial Clouds Sketch",
     className: "bottom-[2%] right-[22%] sm:right-[26%] w-[60px] sm:w-[85px] md:w-[100px] rotate-6",
-    floatClass: "animate-float-1"
+    delay: 0.52,
+    floatY: [-5, 5, -5],
+    duration: 6.4
   },
   {
     id: "floral",
@@ -383,7 +409,9 @@ const SKETCH_ELEMENTS = [
     src: "/sketches/floral_flourish.png",
     alt: "Floral Blossom Flourish Sketch",
     className: "bottom-[2%] right-[2%] sm:right-[4%] w-[55px] sm:w-[78px] md:w-[95px] rotate-12",
-    floatClass: "animate-float-2"
+    delay: 0.5,
+    floatY: [5, -4, 5],
+    duration: 6.3
   }
 ];
 
@@ -397,6 +425,35 @@ const SKETCH_ELEMENTS = [
         ref={heroRef}
         className="relative max-w-[1550px] mx-auto mb-12 md:mb-20 min-h-[75vh] md:min-h-[85vh] flex flex-col items-center justify-center text-center overflow-visible"
       >
+        {/* Subtle Theme-Aligned Visual Aid Prompt & Editorial Scroll Cue */}
+        <motion.div 
+          style={{ y: logoY }}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5]/80 uppercase tracking-[0.24em] pointer-events-none select-none z-10 whitespace-nowrap"
+        >
+          <div>
+            <span className="sm:hidden">Tap or hover elements to explore sketches</span>
+            <span className="hidden sm:inline">Hover elements to explore sketches</span>
+          </div>
+
+          <div className="flex items-center gap-1 text-text/75 font-medium">
+            <span>Scroll To Explore</span>
+            <motion.span
+              animate={{ y: [0, 2.5, 0] }}
+              transition={{
+                duration: 2.4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="inline-block text-[10px] sm:text-xs font-semibold"
+            >
+              ↓
+            </motion.span>
+          </div>
+        </motion.div>
+
         {/* Soft Ambient Background Glow */}
         <motion.div 
           style={{ y: bgGlowY }}
@@ -406,85 +463,89 @@ const SKETCH_ELEMENTS = [
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[600px] md:w-[950px] h-[220px] sm:h-[380px] md:h-[500px] bg-gradient-to-r from-primary/20 via-amber-600/15 to-primary/20 rounded-full blur-[90px] md:blur-[120px] pointer-events-none -z-10 will-change-transform" 
         />
 
-        {/* Single Hardware-Accelerated Parallax Container for Hero Elements */}
+        {/* Individual Authentic Hand-Drawn Item Sketches (Balanced Watermark Backdrop) */}
+        {SKETCH_ELEMENTS.map((item) => {
+          const isItemActive = activeSketchId === item.id;
+          return (
+            <motion.div
+              key={item.id}
+              style={{ y: logoY }}
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ 
+                opacity: isItemActive ? 0.95 : [0.20, 0.32, 0.20], 
+                scale: isItemActive ? 1.15 : 1,
+                translateY: item.floatY
+              }}
+              whileHover={{ 
+                opacity: 0.8, 
+                scale: 1.12, 
+                transition: { duration: 0.25, ease: "easeOut" } 
+              }}
+              transition={{ 
+                opacity: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
+                translateY: { duration: item.duration, repeat: Infinity, ease: "easeInOut" },
+                scale: { duration: 0.8, delay: item.delay }
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveSketchId(prev => prev === item.id ? null : item.id);
+              }}
+              className={`absolute ${item.className} ${
+                isItemActive ? "opacity-95 z-30 scale-115" : "opacity-20 hover:opacity-85 z-20 hover:z-30"
+              } transition-all cursor-pointer pointer-events-auto group/sketch will-change-transform`}
+            >
+              <Image 
+                src={item.src}
+                alt={item.alt}
+                width={160}
+                height={160}
+                unoptimized
+                className={`w-full h-auto object-contain select-none pointer-events-none filter transition-all duration-300 ${
+                  isItemActive 
+                    ? "contrast-140 brightness-80" 
+                    : "contrast-110 brightness-95 group-hover/sketch:contrast-135 group-hover/sketch:brightness-85"
+                }`}
+              />
+            </motion.div>
+          );
+        })}
+
+        {/* Ambient Floating Sparkle Accents - Repositioned into clear negative space */}
+        <motion.div 
+          style={{ y: logoY }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+          className="absolute top-[18%] left-[14%] sm:left-[16%] md:left-[18%] text-amber-700/50 hidden sm:block pointer-events-none z-10"
+        >
+          <Sparkles className="w-5 h-5 animate-pulse" />
+        </motion.div>
+        <motion.div 
+          style={{ y: logoY }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="absolute bottom-[18%] right-[14%] sm:right-[16%] md:right-[18%] text-amber-700/50 hidden sm:block pointer-events-none z-10"
+        >
+          <Sparkles className="w-6 h-6 animate-pulse" />
+        </motion.div>
+
+        {/* Hero Enlarged Brand Logo — Solstice Scroll Upward Parallax Motion */}
         <motion.div
           style={{ y: logoY, scale: logoScale, opacity: logoOpacity }}
-          className="relative w-full h-full min-h-[75vh] md:min-h-[85vh] flex flex-col items-center justify-center will-change-transform"
+          initial={{ opacity: 0, scale: 0.78 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.025 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="relative w-full max-w-[500px] sm:max-w-[700px] md:max-w-[850px] lg:max-w-[950px] aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] filter drop-shadow-2xl cursor-pointer group z-10 pointer-events-none will-change-transform"
         >
-          {/* Subtle Theme-Aligned Visual Aid Prompt & Editorial Scroll Cue */}
-          <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 font-mono text-[9px] sm:text-[10px] text-[#C4B8A5]/80 uppercase tracking-[0.24em] pointer-events-none select-none z-10 whitespace-nowrap">
-            <div>
-              <span className="sm:hidden">Tap or hover elements to explore sketches</span>
-              <span className="hidden sm:inline">Hover elements to explore sketches</span>
-            </div>
-
-            <div className="flex items-center gap-1 text-text/75 font-medium">
-              <span>Scroll To Explore</span>
-              <motion.span
-                animate={{ y: [0, 2.5, 0] }}
-                transition={{
-                  duration: 2.4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="inline-block text-[10px] sm:text-xs font-semibold"
-              >
-                ↓
-              </motion.span>
-            </div>
-          </div>
-
-          {/* Individual Authentic Hand-Drawn Item Sketches (Balanced Watermark Backdrop) */}
-          {SKETCH_ELEMENTS.map((item) => {
-            const isItemActive = activeSketchId === item.id;
-            return (
-              <div
-                key={item.id}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveSketchId(prev => prev === item.id ? null : item.id);
-                }}
-                className={`absolute ${item.className} ${
-                  isItemActive 
-                    ? "opacity-95 z-30 scale-115" 
-                    : `${item.floatClass} hover:opacity-85 z-20 hover:z-30 hover:scale-110`
-                } transition-transform duration-300 ease-out cursor-pointer pointer-events-auto group/sketch`}
-              >
-                <Image 
-                  src={item.src}
-                  alt={item.alt}
-                  width={120}
-                  height={120}
-                  decoding="async"
-                  priority
-                  className={`w-full h-auto object-contain select-none pointer-events-none filter transition-all duration-300 ${
-                    isItemActive 
-                      ? "contrast-140 brightness-80" 
-                      : "contrast-110 brightness-95 group-hover/sketch:contrast-135 group-hover/sketch:brightness-85"
-                  }`}
-                />
-              </div>
-            );
-          })}
-
-          {/* Ambient Floating Sparkle Accents */}
-          <div className="absolute top-[18%] left-[14%] sm:left-[16%] md:left-[18%] text-amber-700/50 hidden sm:block pointer-events-none z-10">
-            <Sparkles className="w-5 h-5 animate-pulse" />
-          </div>
-          <div className="absolute bottom-[18%] right-[14%] sm:right-[16%] md:right-[18%] text-amber-700/50 hidden sm:block pointer-events-none z-10">
-            <Sparkles className="w-6 h-6 animate-pulse" />
-          </div>
-
-          {/* Hero Enlarged Brand Logo */}
-          <div className="relative w-full max-w-[500px] sm:max-w-[700px] md:max-w-[850px] lg:max-w-[950px] aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] filter drop-shadow-2xl cursor-pointer group z-10 pointer-events-none">
-            <Image 
-              src="/artworks/BrandLogo.PNG"
-              alt="Chompify Brand Logo"
-              fill
-              className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01] pointer-events-auto"
-              priority
-            />
-          </div>
+          <Image 
+            src="/artworks/BrandLogo.PNG"
+            alt="Chompify Brand Logo"
+            fill
+            className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01] pointer-events-auto"
+            priority
+          />
         </motion.div>
       </div>
 
